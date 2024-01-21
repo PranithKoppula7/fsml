@@ -3,3 +3,8 @@ build/
 .cache/
 
 python/pybind11/
+
+# build files
+*.exe
+*.lib
+*.exp
