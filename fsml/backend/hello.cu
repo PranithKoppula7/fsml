@@ -1,12 +1,14 @@
+#include <cuda_runtime_api.h>
 #include <stdio.h>
+#include "hello.cuh"
 
-__global__ void helloFromGpu(void) {
+__global__ void helloFromGPU(void) {
   printf("Hello World from GPU!\n");
 }
 
-int main(void) {
-  printf("Hello World from CPU!\n");
-  helloFromGpu<<<1, 10>>>();
-  cudaDeviceReset();
-  return 0;
+namespace Hello {
+  void hello_world() {
+    helloFromGPU<<<1, 1>>>();
+    cudaDeviceReset();
+  }
 }
