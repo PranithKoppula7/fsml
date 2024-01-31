@@ -1,18 +1,18 @@
 #include "ops.cuh"
-#include <__clang_cuda_builtin_vars.h>
-#include <cuda_runtime_api.h>
-#include <driver_types.h>
+#include <cstdio>
 
-__global__ void tensorAdd(float* a, float* b, float* c) {
+__global__ void tensorAdd(const float* a, const float* b, float* c) {
+  printf("Hello World from GPU!\n");
   int i = threadIdx.x;
   c[i] = a[i] + b[i];
   return;
 }
 
-namespace ops {
-  const float* tensor_add(float* a, float* b) {
-    int c[sizeof(a) / sizeof(float)] = { 0 };
-    
+
+namespace Ops {
+  float* tensor_add(float* a, float* b) {
+    float c[sizeof(a) / sizeof(float)] = { 0 };
+
     // create pointers for gpu 
     float* cudaA = 0;
     float* cudaB = 0;
@@ -33,6 +33,8 @@ namespace ops {
     // copy from gpu -> cpu and return
     float* ans = 0;
     cudaMemcpy(ans, cudaC, sizeof(cudaC), cudaMemcpyDeviceToHost);
+
+    cudaDeviceReset();
 
     return ans;
   }

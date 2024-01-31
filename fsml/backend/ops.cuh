@@ -1,3 +1,4 @@
-namespace ops {
- const float* tensor_add(const float* a, const float* b); 
+#pragma once
+namespace Ops {
+  float* tensor_add(float* a, float* b); 
 }

@@ -1,4 +1,6 @@
 #pragma once
+#ifndef FSML_TENSOR_H
+#define FMSL_TENSOR_H
 
 #include <vector>
 
@@ -14,13 +16,12 @@ public:
   // with a single value
   tensor(int size, float value);  
 
-  ~tensor();
-
   tensor operator+(const tensor& other) const;
 
 private:
   int size_;
-  std::vector<float> data_;
+  float* data_;
 };
 
 } // namespace tensor
+#endif
