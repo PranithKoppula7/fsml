@@ -13,6 +13,9 @@ namespace tensor {
     size_t nBytes = size * sizeof(float);
 
     data_ = (float*)malloc(nBytes);
+    for (int i = 0; i < size; i++) {
+      data_[i] = 0;
+    }
   }
 
   /*
@@ -30,11 +33,13 @@ namespace tensor {
   }
 
 
+  tensor::tensor(float* data): data_(data) {}
+
   tensor tensor::operator+(const tensor& other) const { 
     float* a = data_;
     float* b = other.data_;
     float* c = Ops::tensor_add(a, b);
-    std::cout << "c = " << c << std::endl;
-    return NULL;
+    std::cout << "c = " << c[0] << std::endl;
+    return tensor(c);
   }
 }
