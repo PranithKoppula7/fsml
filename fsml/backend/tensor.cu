@@ -1,4 +1,4 @@
-#include "ops.cuh"
+#include "tensor.cuh"
 #include <cstddef>
 #include <cstdio>
 #include <cuda_device_runtime_api.h>
@@ -11,7 +11,7 @@ __global__ void tensorAdd(float* a, float* b, float* c) {
 }
 
 
-namespace Ops {
+namespace Tensor {
   float* tensor_add(float* a, float* b) {
 
     // calculate size

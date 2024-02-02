@@ -1,6 +1,5 @@
 target_sources(
   fsml PRIVATE 
-  ops.cpp 
   tensor.cpp
 )
 

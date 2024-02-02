@@ -1,5 +1,5 @@
 #include "tensor.h"
-#include "../fsml/backend/ops.cuh"
+#include "../fsml/backend/tensor.cuh"
 
 #include <cstddef>
 #include <iostream>
@@ -38,7 +38,7 @@ namespace tensor {
   tensor tensor::operator+(const tensor& other) const { 
     float* a = data_;
     float* b = other.data_;
-    float* c = Ops::tensor_add(a, b);
+    float* c = Tensor::tensor_add(a, b);
     std::cout << "c = " << c[0] << std::endl;
     return tensor(c);
   }
