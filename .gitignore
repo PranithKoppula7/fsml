@@ -8,3 +8,6 @@ python/pybind11/
 *.exe
 *.lib
 *.exp
+
+# vscode
+.vscode

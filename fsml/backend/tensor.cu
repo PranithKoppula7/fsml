@@ -12,15 +12,8 @@ __global__ void tensorAdd(float* a, float* b, float* c) {
 
 
 namespace Tensor {
-  float* tensor_add(float* a, float* b) {
-
-    // calculate size
-    int size = 0;
-    for(int i = 0; i < sizeof(a); i++) {
-      size++;
-    }
+  float* tensor_add(int size, float* a, float* b) {
     size_t nBytes = size * sizeof(float); 
-
 
     // host c 
     float* host_c = (float *)malloc(nBytes);

@@ -1,4 +1,4 @@
 #pragma once
 namespace Tensor {
-  float* tensor_add(float* a, float* b); 
+  float* tensor_add(int size, float* a, float* b); 
 }
