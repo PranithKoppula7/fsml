@@ -34,6 +34,15 @@ namespace tensor {
     delete data_;
   }
 
+  float* tensor::getData() {
+    size_t nBytes = size_ * sizeof(float);
+    float* copy = (float*)malloc(nBytes);
+    for(int i = 0; i < size_; i++) {
+      copy[i] = data_[i];
+    }
+    return copy;
+  }
+
   tensor tensor::operator+(const tensor& other) const { 
     float* c = Tensor::tensor_add(size_, data_, other.data_);
     return tensor(size_, c);

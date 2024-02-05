@@ -7,8 +7,6 @@ namespace tensor {
 class tensor {
 
 public:
-  float* data_;
-
   tensor(int size);
 
   tensor(int size, float value);  
@@ -17,10 +15,13 @@ public:
 
   ~tensor();
 
+  float* getData();
+
   tensor operator+(const tensor& other) const;
 
 private:
   int size_;
+  float* data_;
 };
 
 } // namespace tensor
