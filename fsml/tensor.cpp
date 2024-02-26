@@ -30,9 +30,10 @@ namespace tensor {
 
   tensor::tensor(int size, float* data): size_(size), data_(data) {}
 
-  tensor::~tensor() {
-    delete data_;
-  }
+  // tensor::~tensor() {
+  //   // delete[] data_;
+  //   free(data_);
+  // }
 
   float* tensor::getData() {
     size_t nBytes = size_ * sizeof(float);

@@ -13,7 +13,7 @@ public:
 
   tensor(int size, float* data);
 
-  ~tensor();
+  // ~tensor();
 
   float* getData();
 

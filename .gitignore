@@ -1,8 +1,8 @@
+# build folder
 build/
 
+# clangd
 .cache/
-
-python/pybind11/
 
 # build files
 *.exe
@@ -11,3 +11,6 @@ python/pybind11/
 
 # vscode
 .vscode
+
+#pybind
+python/pybind11

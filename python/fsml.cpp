@@ -3,12 +3,10 @@
 
 namespace py = pybind11;
 
+void init_tensor(py::module_&);
 
-PYBIND11_MODULE(core, handle) {
-  handle.doc() = "fsml is a full stack tiny implementation of modern machine learning";
-  py::class_<tensor::tensor>(
-    handle, "Tensor"
-  )
-  .def(py::init<int>())
-  .def(py::init<int, float>());
+PYBIND11_MODULE(core, m) {
+  m.doc() = "fsml is a full stack tiny implementation of modern machine learning";
+
+  init_tensor(m);
 }

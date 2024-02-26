@@ -3,3 +3,5 @@
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 
 cmake --build .
+
+python setup.py build_ext -j8
