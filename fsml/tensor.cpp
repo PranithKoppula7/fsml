@@ -44,6 +44,24 @@ namespace tensor {
     return copy;
   }
 
+  int tensor::getSize() {
+    return size_;
+  }
+
+  std::string tensor::repr() {
+    std::string s = "";
+    s += "<Tensor size: " + std::to_string(size_);
+    s += ", data: [";
+    for (int i = 0; i < size_; i++) {
+      s += std::to_string(data_[i]);
+      if (i < size_ - 1) {
+        s += ", ";
+      }
+    }
+    s += "]>";
+    return s;
+  }
+
   tensor tensor::operator+(const tensor& other) const { 
     float* c = Tensor::tensor_add(size_, data_, other.data_);
     return tensor(size_, c);
