@@ -32,9 +32,15 @@ tensor::tensor create_tensor(py::array_t<float> d) {
   py::buffer_info d_buffer = d.request();
   std::vector<py::ssize_t> shape = d_buffer.shape;
 
-  if (shape.size() == 1) {
-    return tensor::tensor(shape[0], static_cast<float*>(d_buffer.ptr));
+  std::vector<int> shape_vec;
+  int size = 1;
+
+  for (py::ssize_t s: shape) {
+    shape_vec.push_back((int) s);
+    size *= (int)s;
   }
 
-  return tensor::tensor(1);
+  return tensor::tensor(size, 
+                        static_cast<float*>(d_buffer.ptr),
+                        shape_vec);
 }

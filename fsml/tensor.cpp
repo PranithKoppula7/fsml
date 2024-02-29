@@ -30,12 +30,15 @@ namespace tensor {
 
   tensor::tensor(int size, float* data): size_(size), data_(data) {}
 
+  tensor::tensor(int size, float* data, 
+                std::vector<int> shape): size_(size), data_(data), shape_(shape) {}
+
   // tensor::~tensor() {
   //   // delete[] data_;
   //   free(data_);
   // }
 
-  float* tensor::getData() {
+  float* tensor::data() {
     size_t nBytes = size_ * sizeof(float);
     float* copy = (float*)malloc(nBytes);
     for(int i = 0; i < size_; i++) {
@@ -44,7 +47,7 @@ namespace tensor {
     return copy;
   }
 
-  int tensor::getSize() {
+  int tensor::size() {
     return size_;
   }
 

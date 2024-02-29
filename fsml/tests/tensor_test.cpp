@@ -7,7 +7,7 @@ TEST(TensorTest, AddWithOneElement) {
 
   tensor::tensor c = a + b;
 
-  float* data = c.getData();
+  float* data = c.data();
   EXPECT_EQ(data[0], 3);
 
   delete data;
@@ -19,7 +19,7 @@ TEST(TensorTest, AddWithManyElements) {
 
   tensor::tensor c = a + b;
 
-  float* data = c.getData();
+  float* data = c.data();
   for(int i = 0; i < 10; i++) {
     EXPECT_EQ(data[i], 15);
   }
