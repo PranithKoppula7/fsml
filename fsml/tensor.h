@@ -16,14 +16,13 @@ public:
 
   tensor(int size, float* data);
 
-  tensor(int size, float* data, std::vector<int> shape_);
+  tensor(int size, float* data, std::vector<int> shape);
 
-  // ~tensor();
-
-  /* getters */
   float* data();
 
   int size();
+
+  std::vector<int> shape();
 
   tensor operator+(const tensor& other) const;
 
