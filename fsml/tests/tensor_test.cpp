@@ -4,7 +4,7 @@
 #include <vector>
 
 TEST(TensorTest, ConstructorTestSizeOnly) {
-  tensor::tensor a = tensor::tensor(10);
+  tensor a = tensor::tensor(10);
 
   float* data = a.data();
   for (int i = 0; i < 10; i++) {
@@ -16,7 +16,7 @@ TEST(TensorTest, ConstructorTestSizeOnly) {
 }
 
 TEST(TensorTest, ConstructorTestSizeAndValue) {
-  tensor::tensor a = tensor::tensor(10, 1.0);
+  tensor a = tensor::tensor(10, 1.0);
 
   float* data = a.data();
   for (int i = 0; i < 10; i++) {
@@ -29,7 +29,7 @@ TEST(TensorTest, ConstructorTestSizeAndValue) {
 
 TEST(TensorTest, ConstructorTestSizeAndArray) {
   float d[3] = {1.0, 1.0, 1.0};
-  tensor::tensor a = tensor::tensor(3, d);
+  tensor a = tensor::tensor(3, d);
 
   float* data = a.data();
   for (int i = 0; i < 3; i++) {
@@ -41,10 +41,10 @@ TEST(TensorTest, ConstructorTestSizeAndArray) {
 }
 
 TEST(TensorTest, AddWithOneElement) {
-  tensor::tensor a = tensor::tensor(1, 1);
-  tensor::tensor b = tensor::tensor(1, 2);
+  tensor a = tensor::tensor(1, 1);
+  tensor b = tensor::tensor(1, 2);
 
-  tensor::tensor c = a + b;
+  tensor c = a + b;
 
   float* data = c.data();
   EXPECT_EQ(data[0], 3);
@@ -53,10 +53,10 @@ TEST(TensorTest, AddWithOneElement) {
 }
 
 TEST(TensorTest, AddWithManyElements) {
-  tensor::tensor a = tensor::tensor(10, 5);
-  tensor::tensor b = tensor::tensor(10, 10);
+  tensor a = tensor::tensor(10, 5);
+  tensor b = tensor::tensor(10, 10);
 
-  tensor::tensor c = a + b;
+  tensor c = a + b;
 
   float* data = c.data();
   for (int i = 0; i < 10; i++) {

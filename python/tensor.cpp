@@ -10,11 +10,11 @@
 
 namespace py = pybind11;
 
-tensor::tensor create_tensor(py::array_t<float>);
-// tensor::tensor create_tensor(py::list<float>);
+tensor create_tensor(py::array_t<float>);
+// tensor create_tensor(py::list<float>);
 
 void init_tensor(py::module_& m) {
-  py::class_<tensor::tensor>(
+  py::class_<tensor>(
     m, "Tensor"
   )
   .def(py::init<int>())
@@ -22,13 +22,13 @@ void init_tensor(py::module_& m) {
   .def(py::init([](py::array_t<float> d) {
     return create_tensor(d);
   }))
-  .def("__repr__", [](tensor::tensor t) {
+  .def("__repr__", [](tensor t) {
     return t.repr();
   });
 }
 
 
-tensor::tensor create_tensor(py::array_t<float> d) {
+tensor create_tensor(py::array_t<float> d) {
   py::buffer_info d_buffer = d.request();
   std::vector<py::ssize_t> shape = d_buffer.shape;
 
@@ -40,7 +40,7 @@ tensor::tensor create_tensor(py::array_t<float> d) {
     size *= (int)s;
   }
 
-  return tensor::tensor(size, 
-                        static_cast<float*>(d_buffer.ptr),
-                        shape_vec);
+  return tensor(size, 
+                static_cast<float*>(d_buffer.ptr),
+                shape_vec);
 }

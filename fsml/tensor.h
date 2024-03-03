@@ -5,8 +5,6 @@
 #include <string>
 #include <vector>
 
-namespace tensor {
-
 class tensor {
 
 public:
@@ -34,5 +32,4 @@ private:
   std::vector<int> shape_;
 };
 
-} // namespace tensor
 #endif
