@@ -65,3 +65,20 @@ TEST(TensorTest, AddWithManyElements) {
 
   delete data;
 }
+
+TEST(TensorTest, AddWithSpecificElements) {
+  float a_data[] = {1.0, 2.0};
+  float b_data[] = {2.0, 3.0};
+  tensor a = tensor::tensor(2, a_data);
+  tensor b = tensor::tensor(2, b_data);
+
+  tensor c = a + b;
+
+  float* data = c.data();
+
+  EXPECT_EQ(c.size(), 2);
+  EXPECT_EQ(data[0], 3.0);
+  EXPECT_EQ(data[1], 5.0);
+
+  delete data;
+}

@@ -22,6 +22,10 @@ void init_tensor(py::module_& m) {
   .def(py::init([](py::array_t<float> d) {
     return create_tensor(d);
   }))
+  .def("backward", &tensor::backward)
+  .def("__add__", [](tensor& a, tensor& b) {
+    return a + b;
+  })
   .def("__repr__", [](tensor t) {
     return t.repr();
   });

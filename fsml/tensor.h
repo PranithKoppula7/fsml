@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+class operation;
+
 class tensor {
 
 public:
@@ -22,9 +24,15 @@ public:
 
   std::vector<int> shape();
 
-  tensor operator+(const tensor& other) const;
+  tensor operator+(tensor& other);
+
+  void backward();
 
   std::string repr();
+
+  operation* ctx_;
+  float grad = 0.0;
+  std::vector<tensor*> parents_;
 
 private:
   int size_;

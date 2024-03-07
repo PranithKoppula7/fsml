@@ -15,6 +15,7 @@ tensor::tensor(int size): size_(size) {
     data_[i] = 0;
   }
   shape_.push_back(size);
+  ctx_ = NULL;
 }
 
 /*
@@ -28,14 +29,28 @@ tensor::tensor(int size, float value): size_(size) {
     data_[i] = value;
   }
   shape_.push_back(size);
+  ctx_ = NULL;
 }
 
-tensor::tensor(int size, float* data): size_(size), data_(data) {
+tensor::tensor(int size, float* data): size_(size) {
+  size_t nBytes = size * sizeof(float);
+  data_ = (float*)malloc(nBytes);
+  for (int i = 0; i < size; i++) {
+    data_[i] = data[i];
+  }
   shape_.push_back(size);
+  ctx_ = NULL;
 }
 
 tensor::tensor(int size, float* data, std::vector<int> shape):
-  size_(size), data_(data), shape_(shape) {}
+  size_(size), shape_(shape) {
+  size_t nBytes = size * sizeof(float);
+  data_ = (float*)malloc(nBytes);
+  for (int i = 0; i < size; i++) {
+    data_[i] = data[i];
+  }
+  ctx_ = NULL;
+}
 
 /*
 * returns a copy of data 
@@ -57,6 +72,32 @@ std::vector<int> tensor::shape() {
   return shape_;
 }
 
+tensor tensor::operator+(tensor& other) {
+  operation* Add = new add();
+  tensor t = Add->forward(*this, other);
+  t.parents_.push_back(this);
+  t.parents_.push_back(&other);
+  return t;
+}
+
+void _backward(operation* ctx, std::vector<tensor*>& parents) {
+  if (ctx != NULL) {
+    printf(ctx->op_.c_str());
+    printf("\n");
+    for (tensor* t: parents) {
+      printf(t->repr().c_str());
+      printf("\n");
+      _backward(t->ctx_, parents);
+    }
+  }
+}
+
+void tensor::backward() {
+  grad = 1.0;
+  ctx_->backward(*this);
+}
+
+
 std::string tensor::repr() {
   std::string s = "";
   s += "<Tensor size: " + std::to_string(size_);
@@ -67,10 +108,8 @@ std::string tensor::repr() {
       s += ", ";
     }
   }
-  s += "]>";
+  s += "]";
+  s += ", grad: " + std::to_string(this->grad) + ">\n";
   return s;
 }
 
-tensor tensor::operator+(const tensor& other) const {
-  return add::forward(*this, other);
-}

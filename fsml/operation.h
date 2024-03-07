@@ -1,25 +1,22 @@
-#include "../fsml/backend/tensor.cuh"
-#include "tensor.h"
-
 #include <vector>
+#include <string>
+
+class tensor;
 
 class operation {
-
 public:
-    operation(std::vector<tensor> parents) {
-        parents_ = parents;
-    }
+    std::string op_;
 
-    tensor forward(tensor x, tensor y); 
-    tensor backward(tensor grad);
+    virtual tensor forward(tensor& x, tensor& y) = 0; 
+    virtual void backward(tensor& t) = 0;
 
-private:
-    std::vector<tensor> parents_;
 };
 
 class add : public operation {
 public:
-    add() = delete;
-
-    static tensor forward(tensor x, tensor y);
+    add() {
+        op_ = "+"; 
+    }
+    tensor forward(tensor& x, tensor& y);
+    void backward(tensor& t);
 };
