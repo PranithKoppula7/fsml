@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.27)
 project(fsml LANGUAGES CXX CUDA)
 enable_language(CUDA)
+set(CMAKE_CXX_STANDARD 17)
 
 add_library(fsml)
 

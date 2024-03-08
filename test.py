@@ -4,7 +4,10 @@ import numpy as np
 t = Tensor(5)
 print(t)
 
-t2 = Tensor(5, 3.0)
+# t2 = Tensor(5, 3.0)
+# print(t2)
+
+t2 = Tensor(4)
 print(t2)
 
 t3 = t + t2

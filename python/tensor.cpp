@@ -3,24 +3,36 @@
  * tensor binding and converts types to pybind11
 **/
 
+#include <variant>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
+#include <pybind11/stl.h>
+
 #include "../fsml/tensor.h"
 
 namespace py = pybind11;
 
+using TensorTypes = std::variant<py::int_, py::float_, py::array_t<float>>;
+
 tensor create_tensor(py::array_t<float>);
 // tensor create_tensor(py::list<float>);
 
+
 void init_tensor(py::module_& m) {
+
+
   py::class_<tensor>(
     m, "Tensor"
   )
-  .def(py::init<int>())
-  .def(py::init<int, float>())
-  .def(py::init([](py::array_t<float> d) {
-    return create_tensor(d);
+  .def(py::init([](TensorTypes t) {
+    if (auto pv = std::get_if<py::int_>(&t); pv) {
+      return tensor::tensor(1, py::cast<float>(*pv));
+    } else if (auto pv = std::get_if<py::float_>(&t); pv) {
+      return tensor::tensor(1, py::cast<float>(*pv));
+    } else if (auto pv = std::get_if<py::array_t<float>>(&t); pv) {
+      return create_tensor(py::cast<py::array_t<float>>(*pv));
+    }
   }))
   .def("backward", &tensor::backward)
   .def("__add__", [](tensor& a, tensor& b) {
