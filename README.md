@@ -15,3 +15,5 @@ cmake --build .
 
 ## for future python setup
 python setup.py build_ext -j8
+
+with setup.py its as simple as pip install .

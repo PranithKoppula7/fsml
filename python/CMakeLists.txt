@@ -1,4 +1,4 @@
-add_subdirectory(./pybind11 pybind11)
+add_subdirectory(../lib/pybind11 pybind11)
 
 pybind11_add_module(core fsml.cpp tensor.cpp)
 

@@ -1,4 +1,4 @@
-from build.python.Debug.core import Tensor
+from fsml.Debug.core import Tensor
 import numpy as np
 
 t = Tensor(5)

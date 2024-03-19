@@ -12,5 +12,8 @@ build/
 # vscode
 .vscode
 
-#pybind
-python/pybind11
+# lib
+lib/
+
+# egg-info
+python/fsml.egg-info
