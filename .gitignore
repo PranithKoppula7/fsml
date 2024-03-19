@@ -17,3 +17,6 @@ lib/
 
 # egg-info
 python/fsml.egg-info
+
+#py cache
+__pycache__

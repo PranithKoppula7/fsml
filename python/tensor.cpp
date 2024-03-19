@@ -35,6 +35,7 @@ void init_tensor(py::module_& m) {
     }
   }))
   .def("backward", &tensor::backward)
+  .def("size", &tensor::size)
   .def("__add__", [](tensor& a, tensor& b) {
     return a + b;
   })
