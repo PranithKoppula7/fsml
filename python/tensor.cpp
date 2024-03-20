@@ -36,6 +36,14 @@ void init_tensor(py::module_& m) {
   }))
   .def("backward", &tensor::backward)
   .def("size", &tensor::size)
+  .def("data", [](tensor a) {
+    float* data = a.data();
+    py::list pl;
+    for (int i = 0; i < a.size(); i++) {
+      pl.append(data[i]);
+    }
+    return pl;
+  })
   .def("__add__", [](tensor& a, tensor& b) {
     return a + b;
   })
