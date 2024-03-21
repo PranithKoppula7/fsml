@@ -30,3 +30,14 @@ class TensorTest(unittest.TestCase):
 
         self.assertEqual(t3.size(), 2)
         self.assertEqual(t3.data(), [2.0, 4.0])
+
+    def test_backward(self):
+        t1 = Tensor(np.array([1.0, 2.0]))
+        t2 = Tensor(np.array([1.0, 2.0]))
+
+        t3 = t1 + t2
+        t3.backward()
+
+        self.assertEqual(t3.grad(), 1)
+        self.assertEqual(t2.grad(), 1)
+        self.assertEqual(t1.grad(), 1)
