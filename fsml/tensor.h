@@ -31,7 +31,7 @@ public:
   std::string repr();
 
   operation* ctx_;
-  float grad = 0.0;
+  tensor* grad;
   std::vector<tensor*> parents_;
 
 private:

@@ -16,6 +16,8 @@ void add::backward(tensor& t) {
     tensor* p1 = t.parents_.at(0);
     tensor* p2 = t.parents_.at(1);
 
-    p1->grad += t.grad;
-    p2->grad += t.grad;
+    p1->grad = new tensor(p1->size(), 1.0);
+    p2->grad = new tensor(p2->size(), 1.0);
+
+    return;
 }

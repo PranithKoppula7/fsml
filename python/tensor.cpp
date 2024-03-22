@@ -45,7 +45,7 @@ void init_tensor(py::module_& m) {
     return pl;
   })
   .def("grad", [](tensor a) {
-    return a.grad;
+    return *(a.grad);
   })
   .def("__add__", [](tensor& a, tensor& b) {
     return a + b;

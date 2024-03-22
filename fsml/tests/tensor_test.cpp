@@ -82,3 +82,24 @@ TEST(TensorTest, AddWithSpecificElements) {
 
   delete data;
 }
+
+TEST(TensorTest, AddBackward) {
+  float a_data[] = {1.0, 2.0};
+  float b_data[] = {2.0, 3.0};
+  tensor a = tensor::tensor(2, a_data);
+  tensor b = tensor::tensor(2, b_data);
+
+  tensor c = a + b;
+
+  c.backward();
+  float* a_grad = a.grad->data();
+  float* b_grad = b.grad->data();
+  float* c_grad = c.grad->data();
+
+  EXPECT_EQ(c.size(), 2);
+  for (int i = 0; i < 2; i++) {
+    EXPECT_EQ(a_grad[i], 1.0);
+    EXPECT_EQ(b_grad[i], 1.0);
+    EXPECT_EQ(c_grad[i], 1.0);
+  }
+}

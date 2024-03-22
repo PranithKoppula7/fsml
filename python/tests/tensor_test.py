@@ -38,6 +38,6 @@ class TensorTest(unittest.TestCase):
         t3 = t1 + t2
         t3.backward()
 
-        self.assertEqual(t3.grad(), 1)
-        self.assertEqual(t2.grad(), 1)
-        self.assertEqual(t1.grad(), 1)
+        self.assertEqual(t3.grad().data(), [1.0, 1.0])
+        self.assertEqual(t2.grad().data(), [1.0, 1.0])
+        self.assertEqual(t1.grad().data(), [1.0, 1.0])

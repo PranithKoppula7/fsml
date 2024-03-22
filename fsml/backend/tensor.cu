@@ -36,7 +36,6 @@ namespace Tensor {
     dim3 block (size);
     dim3 grid (size / block.x);
     tensorAdd<<<grid, block>>>(cudaA, cudaB, cudaC);
-    printf("Excution configuration <<<%d, %d>>>\n", grid.x, block.x);
 
     // copy from gpu -> cpu and return
     cudaMemcpy(host_c, cudaC, nBytes, cudaMemcpyDeviceToHost);

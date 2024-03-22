@@ -93,7 +93,7 @@ void _backward(operation* ctx, std::vector<tensor*>& parents) {
 }
 
 void tensor::backward() {
-  grad = 1.0;
+  grad = new tensor(size_, 1.0);
   ctx_->backward(*this);
 }
 
@@ -108,8 +108,8 @@ std::string tensor::repr() {
       s += ", ";
     }
   }
-  s += "]";
-  s += ", grad: " + std::to_string(this->grad) + ">\n";
+  s += "]\n";
+  // s += ", grad: " + std::to_string(this->grad) + ">\n";
   return s;
 }
 
