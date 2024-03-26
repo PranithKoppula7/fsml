@@ -1,5 +1,5 @@
 target_sources(
   fsml
-  PRIVATE
+  PUBLIC
   tensor.cu
 )

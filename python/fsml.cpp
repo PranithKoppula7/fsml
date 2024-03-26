@@ -1,5 +1,4 @@
 #include <pybind11/pybind11.h>
-#include "../fsml/tensor.h"
 
 namespace py = pybind11;
 

@@ -1,4 +1,4 @@
-from fsml.Debug.core import Tensor
+from fsml.core import Tensor
 import numpy as np
 import unittest
 

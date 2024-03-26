@@ -39,5 +39,4 @@ private:
   float* data_;
   std::vector<int> shape_;
 };
-
 #endif

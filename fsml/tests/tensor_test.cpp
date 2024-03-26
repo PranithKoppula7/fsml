@@ -4,7 +4,7 @@
 #include <vector>
 
 TEST(TensorTest, ConstructorTestSizeOnly) {
-  tensor a = tensor::tensor(10);
+  tensor a = tensor(10);
 
   float* data = a.data();
   for (int i = 0; i < 10; i++) {
@@ -16,7 +16,7 @@ TEST(TensorTest, ConstructorTestSizeOnly) {
 }
 
 TEST(TensorTest, ConstructorTestSizeAndValue) {
-  tensor a = tensor::tensor(10, 1.0);
+  tensor a = tensor(10, 1.0);
 
   float* data = a.data();
   for (int i = 0; i < 10; i++) {
@@ -29,7 +29,7 @@ TEST(TensorTest, ConstructorTestSizeAndValue) {
 
 TEST(TensorTest, ConstructorTestSizeAndArray) {
   float d[3] = {1.0, 1.0, 1.0};
-  tensor a = tensor::tensor(3, d);
+  tensor a = tensor(3, d);
 
   float* data = a.data();
   for (int i = 0; i < 3; i++) {
@@ -41,8 +41,8 @@ TEST(TensorTest, ConstructorTestSizeAndArray) {
 }
 
 TEST(TensorTest, AddWithOneElement) {
-  tensor a = tensor::tensor(1, 1);
-  tensor b = tensor::tensor(1, 2);
+  tensor a = tensor(1, 1);
+  tensor b = tensor(1, 2);
 
   tensor c = a + b;
 
@@ -53,8 +53,8 @@ TEST(TensorTest, AddWithOneElement) {
 }
 
 TEST(TensorTest, AddWithManyElements) {
-  tensor a = tensor::tensor(10, 5);
-  tensor b = tensor::tensor(10, 10);
+  tensor a = tensor(10, 5);
+  tensor b = tensor(10, 10);
 
   tensor c = a + b;
 
@@ -69,8 +69,8 @@ TEST(TensorTest, AddWithManyElements) {
 TEST(TensorTest, AddWithSpecificElements) {
   float a_data[] = {1.0, 2.0};
   float b_data[] = {2.0, 3.0};
-  tensor a = tensor::tensor(2, a_data);
-  tensor b = tensor::tensor(2, b_data);
+  tensor a = tensor(2, a_data);
+  tensor b = tensor(2, b_data);
 
   tensor c = a + b;
 
@@ -86,8 +86,8 @@ TEST(TensorTest, AddWithSpecificElements) {
 TEST(TensorTest, AddBackward) {
   float a_data[] = {1.0, 2.0};
   float b_data[] = {2.0, 3.0};
-  tensor a = tensor::tensor(2, a_data);
-  tensor b = tensor::tensor(2, b_data);
+  tensor a = tensor(2, a_data);
+  tensor b = tensor(2, b_data);
 
   tensor c = a + b;
 
