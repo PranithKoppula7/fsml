@@ -28,6 +28,8 @@ public:
 
   void backward();
 
+  void create_graph();
+
   std::string repr();
 
   operation* ctx_;

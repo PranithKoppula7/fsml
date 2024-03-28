@@ -42,6 +42,7 @@ void init_tensor(py::module_& m) {
   .def("grad", [](tensor a) {
     return *(a.grad);
   })
+  .def("graph", &tensor::create_graph)
   .def("__add__", [](tensor& a, tensor& b) {
     return a + b;
   })

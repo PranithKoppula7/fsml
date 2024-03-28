@@ -1,6 +1,7 @@
 #include "tensor.h"
 #include "../fsml/backend/tensor.cuh"
 #include "operation.h"
+#include "graph.h"
 
 #include <cstddef>
 #include <iostream>
@@ -95,6 +96,10 @@ void _backward(operation* ctx, std::vector<tensor*>& parents) {
 void tensor::backward() {
   grad = new tensor(size_, 1.0);
   ctx_->backward(*this);
+}
+
+void tensor::create_graph() {
+  graph::run();
 }
 
 

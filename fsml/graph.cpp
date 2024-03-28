@@ -1,7 +1,13 @@
+
+#include "graph.h"
+
 #include <graphviz/gvc.h>
 #include <graphviz/cgraph.h>
 
-int main() {
+graph::graph() {}
+
+void graph::run() {
+
     GVC_t *gvc = gvContext();
 
     Agraph_t *g = agopen((char*)"g", Agundirected, 0);
@@ -14,5 +20,5 @@ int main() {
 
     gvFreeLayout(gvc, g);
     agclose(g);
-    return gvFreeContext(gvc);
+    // gvFreeContext(gvc);
 }
