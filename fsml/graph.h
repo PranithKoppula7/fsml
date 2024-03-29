@@ -1,7 +1,11 @@
 #pragma once
 
+#include <vector>
+#include "tensor.h"
+
+
 class graph {
 public:
     graph();
-    static void run();
+    static void run(tensor t);
 };

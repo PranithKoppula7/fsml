@@ -99,7 +99,7 @@ void tensor::backward() {
 }
 
 void tensor::create_graph() {
-  graph::run();
+  graph::run(*this);
 }
 
 
