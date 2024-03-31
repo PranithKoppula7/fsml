@@ -1,8 +1,6 @@
 #pragma once
 
-#include <vector>
 #include "tensor.h"
-
 
 class graph {
 public:

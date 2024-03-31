@@ -4,6 +4,9 @@
 #include <graphviz/gvc.h>
 #include <graphviz/cgraph.h>
 
+#include <map>
+#include <vector>
+
 void create_graph(tensor t, GVC_t* gvc, Agraph_t* root);
 
 graph::graph() {}
@@ -23,10 +26,25 @@ void graph::run(tensor t) {
     gvFreeContext(gvc);
 }
 
-void create_graph(tensor t, GVC_t* gvc, Agraph_t* root) {
-    Agnode_t *curr = agnode(root, t.repr().data(), 1);
-    for (tensor* p: t.parents_) {
-        Agnode_t *m = agnode(root, p->repr().data(), 1);
-        Agedge_t *e = agedge(root, curr, m, 0, 1);
+void dfs(tensor* t, 
+         std::map<tensor*,
+         Agnode_t*>& graph_map, 
+         GVC_t* gvc,
+         Agraph_t* r) {
+
+    if (t == NULL) return;
+    if (graph_map.find(t) == graph_map.end()) {
+        Agnode_t* curr = agnode(r, t->repr().data(), 1);
+        graph_map[t] = curr;
     }
+
+    for (tensor* p: t->parents_) {
+        dfs(p, graph_map, gvc, r);
+        Agedge_t *e = agedge(r, graph_map[t], graph_map[p], 0, 1);
+    }
+}
+
+void create_graph(tensor t, GVC_t* gvc, Agraph_t* root) {
+    std::map<tensor*, Agnode_t*> graph_map;
+    dfs(&t, graph_map, gvc, root);
 }
