@@ -9,6 +9,8 @@
 #include <map>
 #include <vector>
 
+static int ID = 1;
+
 void create_graph(tensor t, GVC_t* gvc, Agraph_t* root);
 
 graph::graph() {}
@@ -41,14 +43,13 @@ void dfs(tensor* t,
 
     if(t->parents_.size() == 0) return;
 
-    std::string op_name = t->ctx_->op_ + t->repr();
-    // Agnode_t* op = agnode(r, t->ctx_->op_.data(), 1);
-    Agnode_t* op = agnode(r, op_name.data(), 1);
+    Agnode_t* op = agnode(r, std::to_string(ID).data(), 1);
+    ID++;
+    agsafeset(op, "label", t->ctx_->op_.data(), "");
     agedge(r, graph_map[t], op, 0, 1);
     for (tensor* p: t->parents_) {
         dfs(p, graph_map, gvc, r);
         agedge(r, op, graph_map[p], 0, 1);
-        // agedge(r, graph_map[t], graph_map[p], 0, 1);
     }
 }
 

@@ -81,18 +81,6 @@ tensor tensor::operator+(tensor& other) {
   return t;
 }
 
-void _backward(operation* ctx, std::vector<tensor*>& parents) {
-  if (ctx != NULL) {
-    printf(ctx->op_.c_str());
-    printf("\n");
-    for (tensor* t: parents) {
-      printf(t->repr().c_str());
-      printf("\n");
-      _backward(t->ctx_, parents);
-    }
-  }
-}
-
 void tensor::backward() {
   grad = new tensor(size_, 1.0);
   ctx_->backward(*this);
@@ -113,8 +101,7 @@ std::string tensor::repr() {
       s += ", ";
     }
   }
-  s += "]\n";
-  // s += ", grad: " + std::to_string(this->grad) + ">\n";
+  s += "]>\n";
   return s;
 }
 
