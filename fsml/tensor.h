@@ -10,6 +10,7 @@ class operation;
 class tensor {
 
 public:
+
   tensor(int size);
 
   tensor(int size, float value);  
@@ -24,7 +25,11 @@ public:
 
   std::vector<int> shape();
 
+  /* add op */
   tensor operator+(tensor& other);
+  tensor operator+(int other);
+  // tensor operator+(float other);
+  // tensor operator+(double other);
 
   void backward();
 

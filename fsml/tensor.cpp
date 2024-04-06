@@ -81,6 +81,11 @@ tensor tensor::operator+(tensor& other) {
   return t;
 }
 
+tensor tensor::operator+(int other) {
+  tensor* other_broadcast = new tensor(size_, (float)other);
+  return *this + *other_broadcast;
+}
+
 void tensor::backward() {
   grad = new tensor(size_, 1.0);
   ctx_->backward(*this);

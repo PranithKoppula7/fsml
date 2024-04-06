@@ -4,6 +4,7 @@
 **/
 
 #include <variant>
+#include <iostream>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
@@ -14,8 +15,11 @@
 namespace py = pybind11;
 
 using TensorInitTypes = std::variant<py::int_, py::float_, py::array_t<float>>;
+using TensorAddTypes = std::variant<py::int_, py::float_, py::object>;
 
 tensor create_tensor(TensorInitTypes t);
+tensor add_tensor(tensor& a, TensorAddTypes b);
+// TODO: @pranithkoppula - add list constructor
 // tensor create_tensor(py::list<float>);
 
 
@@ -43,12 +47,29 @@ void init_tensor(py::module_& m) {
     return *(a.grad);
   })
   .def("graph", &tensor::create_graph)
-  .def("__add__", [](tensor& a, tensor& b) {
-    return a + b;
+  .def("__add__", &add_tensor)
+  .def("parents", [](tensor& a) {
+    for (tensor* p: a.parents_) {
+      std::cout << p->repr() << std::endl;
+    }
   })
   .def("__repr__", [](tensor t) {
     return t.repr();
   });
+}
+
+tensor add_tensor(tensor& a, TensorAddTypes b) {
+  if (auto pv = std::get_if<py::int_>(&b); pv) {
+    std::cout << "adding in int" << std::endl;
+    return a + *pv;
+  } else if (auto pv = std::get_if<py::float_>(&b); pv) {
+    std::cout << "adding in float" << std::endl;
+    return a;
+  } else if (auto pv = std::get_if<py::object>(&b); pv) {
+    // TODO: @pranithkoppula - check for type, error handle
+    return a + py::cast<tensor&>(*pv);
+  }
+  return tensor(1);
 }
 
 
