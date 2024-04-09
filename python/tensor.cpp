@@ -60,10 +60,8 @@ void init_tensor(py::module_& m) {
 
 tensor add_tensor(tensor& a, TensorAddTypes b) {
   if (auto pv = std::get_if<py::int_>(&b); pv) {
-    std::cout << "adding in int" << std::endl;
     return a + *pv;
   } else if (auto pv = std::get_if<py::float_>(&b); pv) {
-    std::cout << "adding in float" << std::endl;
     return a;
   } else if (auto pv = std::get_if<py::object>(&b); pv) {
     // TODO: @pranithkoppula - check for type, error handle

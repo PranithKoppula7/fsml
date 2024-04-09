@@ -8,10 +8,14 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <iostream>
 
 static int ID = 1;
 
-void create_graph(tensor t, GVC_t* gvc, Agraph_t* root);
+void dfs(tensor* t, 
+         std::map<tensor*, Agnode_t*>& graph_map, 
+         GVC_t* gvc,
+         Agraph_t* r);
 
 graph::graph() {}
 
@@ -20,7 +24,8 @@ void graph::run(tensor t) {
     GVC_t *gvc = gvContext();
     Agraph_t *g = agopen((char*)"g", Agundirected, 0);
 
-    create_graph(t, gvc, g);
+    std::map<tensor*, Agnode_t*> graph_map;
+    dfs(&t, graph_map, gvc, g);
 
     gvLayout(gvc, g, "dot");
     gvRenderFilename(gvc, g, "png", "graph.png");
@@ -37,7 +42,9 @@ void dfs(tensor* t,
 
     if (t == NULL) return;
     if (graph_map.find(t) == graph_map.end()) {
-        Agnode_t* curr = agnode(r, t->repr().data(), 1);
+        Agnode_t* curr = agnode(r, std::to_string(ID).data(), 1);
+        ID++;
+        agsafeset(curr, "label", t->repr().data(), "");
         graph_map[t] = curr;
     }
 
@@ -51,9 +58,4 @@ void dfs(tensor* t,
         dfs(p, graph_map, gvc, r);
         agedge(r, op, graph_map[p], 0, 1);
     }
-}
-
-void create_graph(tensor t, GVC_t* gvc, Agraph_t* root) {
-    std::map<tensor*, Agnode_t*> graph_map;
-    dfs(&t, graph_map, gvc, root);
 }
