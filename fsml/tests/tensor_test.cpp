@@ -40,7 +40,7 @@ TEST(TensorTest, ConstructorTestSizeAndArray) {
   EXPECT_EQ(a.shape(), std::vector<int> {3});
 }
 
-TEST(TensorTest, AddWithOneElement) {
+TEST(TensorTest, AddTensorWithOneElement) {
   tensor a = tensor(1, 1);
   tensor b = tensor(1, 2);
 
@@ -52,7 +52,7 @@ TEST(TensorTest, AddWithOneElement) {
   delete data;
 }
 
-TEST(TensorTest, AddWithManyElements) {
+TEST(TensorTest, AddTensorWithManyElements) {
   tensor a = tensor(10, 5);
   tensor b = tensor(10, 10);
 
@@ -66,7 +66,7 @@ TEST(TensorTest, AddWithManyElements) {
   delete data;
 }
 
-TEST(TensorTest, AddWithSpecificElements) {
+TEST(TensorTest, AddTensorWithSpecificElements) {
   float a_data[] = {1.0, 2.0};
   float b_data[] = {2.0, 3.0};
   tensor a = tensor(2, a_data);
@@ -83,7 +83,7 @@ TEST(TensorTest, AddWithSpecificElements) {
   delete data;
 }
 
-TEST(TensorTest, AddBackward) {
+TEST(TensorTest, AddTensorBackward) {
   float a_data[] = {1.0, 2.0};
   float b_data[] = {2.0, 3.0};
   tensor a = tensor(2, a_data);
@@ -102,4 +102,15 @@ TEST(TensorTest, AddBackward) {
     EXPECT_EQ(b_grad[i], 1.0);
     EXPECT_EQ(c_grad[i], 1.0);
   }
+}
+
+TEST(TensorTest, AddInt) {
+  float a_data[] = {1.0, 2.0};
+  tensor a = tensor(2, a_data);
+
+  tensor b = a + 1;
+  float* data = b.data();
+
+  EXPECT_EQ(data[0], 2.0);
+  EXPECT_EQ(data[1], 3.0);
 }
