@@ -81,8 +81,8 @@ tensor tensor::operator+(tensor& other) {
   return t;
 }
 
-tensor tensor::operator+(int other) {
-  tensor* other_broadcast = new tensor(size_, (float)other);
+tensor tensor::operator+(float other) {
+  tensor* other_broadcast = new tensor(size_, other);
   return *this + *other_broadcast;
 }
 

@@ -27,9 +27,7 @@ public:
 
   /* add op */
   tensor operator+(tensor& other);
-  tensor operator+(int other);
-  // tensor operator+(float other);
-  // tensor operator+(double other);
+  tensor operator+(float other);
 
   void backward();
 

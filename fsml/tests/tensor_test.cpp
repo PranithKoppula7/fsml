@@ -104,11 +104,11 @@ TEST(TensorTest, AddTensorBackward) {
   }
 }
 
-TEST(TensorTest, AddInt) {
+TEST(TensorTest, AddFloat) {
   float a_data[] = {1.0, 2.0};
   tensor a = tensor(2, a_data);
 
-  tensor b = a + 1;
+  tensor b = a + 1.0;
   float* data = b.data();
 
   EXPECT_EQ(data[0], 2.0);
