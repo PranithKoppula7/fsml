@@ -22,7 +22,7 @@ class TensorTest(unittest.TestCase):
         self.assertEqual(t.size(), 2)
         self.assertEqual(t.data(), [1.0, 2.0])
 
-    def test_add(self):
+    def test_add_tensor(self):
         t1 = Tensor(np.array([1.0, 2.0]))
         t2 = Tensor(np.array([1.0, 2.0]))
 
@@ -41,3 +41,19 @@ class TensorTest(unittest.TestCase):
         self.assertEqual(t3.grad().data(), [1.0, 1.0])
         self.assertEqual(t2.grad().data(), [1.0, 1.0])
         self.assertEqual(t1.grad().data(), [1.0, 1.0])
+
+    def test_add_int(self):
+        t1 = Tensor(np.array([1.0, 2.0]));
+
+        t2 = t1 + 1;
+
+        self.assertEqual(t2.size(), 2);
+        self.assertEqual(t2.data(), [2.0, 3.0]);
+
+    def test_add_float(self):
+        t1 = Tensor(np.array([1.0, 2.0]));
+
+        t2 = t1 + 1.0;
+
+        self.assertEqual(t2.size(), 2);
+        self.assertEqual(t2.data(), [2.0, 3.0]);
