@@ -67,7 +67,7 @@ tensor add_tensor(tensor& a, TensorAddTypes b) {
     // TODO: @pranithkoppula - check for type, error handle
     return a + py::cast<tensor&>(*pv);
   }
-  return tensor(1);
+  throw std::invalid_argument("Got type that is not supported");
 }
 
 
@@ -94,5 +94,5 @@ tensor create_tensor(TensorInitTypes t) {
                   shape_vec);
   }
 
-  return tensor(1);
+  throw std::invalid_argument("Got type that is not supported for initializing tensor");
 }
