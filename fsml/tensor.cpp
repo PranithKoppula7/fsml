@@ -29,7 +29,8 @@ tensor::tensor(int size, float value): size_(size) {
   for (int i = 0; i < size; i++) {
     data_[i] = value;
   }
-  shape_.push_back(size);
+
+  if (size_ > 1) shape_.push_back(size);
   ctx_ = NULL;
 }
 
@@ -39,7 +40,7 @@ tensor::tensor(int size, float* data): size_(size) {
   for (int i = 0; i < size; i++) {
     data_[i] = data[i];
   }
-  shape_.push_back(size);
+  if (size_ > 1) shape_.push_back(size);
   ctx_ = NULL;
 }
 

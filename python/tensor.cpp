@@ -47,12 +47,13 @@ void init_tensor(py::module_& m) {
     return *(a.grad);
   })
   .def("graph", &tensor::create_graph)
-  .def("__add__", &add_tensor)
   .def("parents", [](tensor& a) {
     for (tensor* p: a.parents_) {
       std::cout << p->repr() << std::endl;
     }
   })
+  .def("shape", &tensor::shape)
+  .def("__add__", &add_tensor)
   .def("__repr__", [](tensor t) {
     return t.repr();
   });
