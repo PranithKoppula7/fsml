@@ -114,3 +114,16 @@ TEST(TensorTest, AddFloat) {
   EXPECT_EQ(data[0], 2.0);
   EXPECT_EQ(data[1], 3.0);
 }
+
+TEST(TensorTest, BroadcastInvalidShapesThrowsError) {
+  float a_data[] = {1.0, 2.0};
+  float b_data[] = {2.0, 3.0, 4.0, 5.0, 6.0, 7.0};
+  tensor a = tensor(2, a_data);
+  tensor b = tensor(3, b_data, std::vector<int>{2, 3});
+
+  try {
+    tensor c = a + b;
+  } catch (std::runtime_error e) {
+    EXPECT_STREQ("shapes are not broadcastable", e.what());
+  }
+}

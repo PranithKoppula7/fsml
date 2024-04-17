@@ -75,10 +75,11 @@ std::vector<int> tensor::shape() {
 }
 
 tensor tensor::operator+(tensor& other) {
+  tensor& other_bc = broadcast(other);
   operation* Add = new add();
-  tensor t = Add->forward(*this, other);
+  tensor t = Add->forward(*this, other_bc);
   t.parents_.push_back(this);
-  t.parents_.push_back(&other);
+  t.parents_.push_back(&other_bc);
   return t;
 }
 
@@ -96,6 +97,38 @@ void tensor::create_graph() {
   graph::run(*this);
 }
 
+tensor& tensor::broadcast(tensor& other) {
+  // shape matches exactly
+  if (shape_.size() == other.shape_.size() && shape_ == other.shape_) {
+    return other;
+  }
+
+  if (shape_.size() < other.shape_.size()) {
+    int j = other.shape_.size() - 1;
+    for (int i = shape_.size() - 1; i >= 0; i--) {
+      if (shape_[i] != other.shape_[j] &&
+          (shape_[i] != 1 || other.shape_[j] != 1)) {
+        throw std::runtime_error("shapes are not broadcastable");
+      }
+      j--;
+    }
+    
+  }
+
+  if (other.shape_.size() < shape_.size()) {
+    int j = shape_.size() - 1;
+    for (int i = other.shape_.size() - 1; i >= 0; i--) {
+      if (other.shape_[i] != shape_[j] && 
+          (other.shape_[i] != 1 || shape_[j] != 1)) {
+        throw std::runtime_error("shapes are not broadcastable");
+      }
+      j--;
+    }
+
+  }
+
+  return other;
+}
 
 std::string tensor::repr() {
   std::string s = "";

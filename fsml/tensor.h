@@ -6,6 +6,7 @@
 #include <vector>
 
 class operation;
+class tensor;
 
 class tensor {
 
@@ -38,10 +39,11 @@ public:
   operation* ctx_;
   tensor* grad;
   std::vector<tensor*> parents_;
-
 private:
   int size_;
   float* data_;
   std::vector<int> shape_;
+
+  tensor& broadcast(tensor& other);
 };
 #endif
