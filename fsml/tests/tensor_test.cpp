@@ -40,6 +40,28 @@ TEST(TensorTest, ConstructorTestSizeAndArray) {
   EXPECT_EQ(a.shape(), std::vector<int> {3});
 }
 
+TEST(TensorTest, ConstructorTestSizeAndArrayAndShape) {
+  float d[3] = {1.0, 1.0, 1.0};
+  tensor a = tensor(3, d, std::vector<int>{3});
+
+  float* data = a.data();
+  for (int i = 0; i < 3; i++) {
+    EXPECT_EQ(data[i], 1.0);
+  }
+
+  EXPECT_EQ(a.size(), 3);
+  EXPECT_EQ(a.shape(), std::vector<int> {3});
+}
+
+TEST(TensorTest, ConstructorTestSizeAndArrayAndShapeIncorrect) {
+  try {
+    float d[3] = {1.0, 1.0, 1.0};
+    tensor a = tensor(3, d, std::vector<int>{2});
+  } catch (std::runtime_error e) {
+    EXPECT_STREQ("shape does not match size", e.what());
+  }
+}
+
 TEST(TensorTest, AddTensorWithOneElement) {
   tensor a = tensor(1, 1);
   tensor b = tensor(1, 2);
@@ -119,7 +141,7 @@ TEST(TensorTest, BroadcastInvalidShapesThrowsError) {
   float a_data[] = {1.0, 2.0};
   float b_data[] = {2.0, 3.0, 4.0, 5.0, 6.0, 7.0};
   tensor a = tensor(2, a_data);
-  tensor b = tensor(3, b_data, std::vector<int>{2, 3});
+  tensor b = tensor(6, b_data, std::vector<int>{2, 3});
 
   try {
     tensor c = a + b;

@@ -46,6 +46,16 @@ tensor::tensor(int size, float* data): size_(size) {
 
 tensor::tensor(int size, float* data, std::vector<int> shape):
   size_(size), shape_(shape) {
+
+  int shapeTotal = 1;
+  for (int s: shape_) {
+    shapeTotal *= s;
+  }
+
+  if (shapeTotal != size_) {
+    throw std::runtime_error("shape does not match size");
+  }
+  
   size_t nBytes = size * sizeof(float);
   data_ = (float*)malloc(nBytes);
   for (int i = 0; i < size; i++) {
