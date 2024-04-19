@@ -21,3 +21,27 @@ void add::backward(tensor& t) {
 
     return;
 }
+
+tensor reshape::forward(tensor& x, std::vector<int> shape) {
+    int shape_total = 1;
+    for (int s: shape) shape_total *= s;
+
+    if (shape_total != x.size()) {
+        std::string shape_str = "";
+        for (int i = 0; i < shape.size(); i++) {
+            shape_str += std::to_string(shape[i]);
+            if (i != shape.size() - 1) {
+                shape_str += ",";
+            }
+        }
+        throw std::runtime_error(
+            "cannot reshape tensor of size " 
+             + std::to_string(x.size())
+             + "into shape "
+             + "(" + shape_str + ")"
+        );
+    }
+
+    input_shape = x.shape();
+    return tensor(x.size(), x.data(), shape);
+}
