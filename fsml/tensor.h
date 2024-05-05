@@ -8,6 +8,9 @@
 class operation;
 class tensor;
 
+// helper functions
+std::vector<std::vector<int>> pad_left(std::vector<std::vector<int>> shapes);
+
 class tensor {
 
 public:

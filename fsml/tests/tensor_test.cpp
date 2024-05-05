@@ -149,3 +149,60 @@ TEST(TensorTest, BroadcastInvalidShapesThrowsError) {
     EXPECT_STREQ("shapes are not broadcastable", e.what());
   }
 }
+
+TEST(TensorTest, PadLeftGeneral) {
+  float a_data[] = {1.0, 2.0};
+  float b_data[] = {2.0, 3.0, 4.0, 5.0, 6.0, 7.0};
+  tensor a = tensor(2, a_data);
+  tensor b = tensor(6, b_data, std::vector<int>{2, 3});
+  std::vector<std::vector<int>> expected = std::vector<std::vector<int>>{
+    std::vector<int>{1, 2},
+    std::vector<int>{2, 3}
+  };
+
+  std::vector<std::vector<int>> ans = pad_left(
+    std::vector<std::vector<int>>{a.shape(), b.shape()});
+
+  EXPECT_EQ(ans.size(), 2);
+  EXPECT_EQ(ans, expected);
+}
+
+TEST(TensorTest, PadLeftReturnsSame) {
+  float a_data[] = {1.0, 2.0};
+  float b_data[] = {2.0, 3.0, 4.0, 5.0, 6.0, 7.0};
+  tensor a = tensor(2, a_data, std::vector<int>{1, 2});
+  tensor b = tensor(6, b_data, std::vector<int>{2, 3});
+  std::vector<std::vector<int>> expected = std::vector<std::vector<int>>{
+    std::vector<int>{1, 2},
+    std::vector<int>{2, 3}
+  };
+
+  std::vector<std::vector<int>> ans = pad_left(
+    std::vector<std::vector<int>>{a.shape(), b.shape()});
+
+  EXPECT_EQ(ans.size(), 2);
+  EXPECT_EQ(ans, expected);
+}
+
+TEST(TensorTest, PadLeft3dMultiple) {
+  float a_data[] = {1.0, 2.0};
+  float b_data[] = {2.0, 3.0, 4.0, 5.0, 6.0, 7.0};
+  float c_data[] = {2.0, 3.0, 4.0, 5.0, 6.0};
+  float d_data[] = {4.0, 5.0, 6.0};
+  tensor a = tensor(2, a_data, std::vector<int>{2});
+  tensor b = tensor(6, b_data, std::vector<int>{2, 3});
+  tensor c = tensor(4, c_data, std::vector<int>{2, 2});
+  tensor d = tensor(3, d_data, std::vector<int>{1, 1, 3});
+  std::vector<std::vector<int>> expected = std::vector<std::vector<int>>{
+    std::vector<int>{1, 1, 2},
+    std::vector<int>{1, 2, 3},
+    std::vector<int>{1, 2, 2},
+    std::vector<int>{1, 1, 3}
+  };
+
+  std::vector<std::vector<int>> ans = pad_left(
+    std::vector<std::vector<int>>{a.shape(), b.shape(), c.shape(), d.shape()});
+
+  EXPECT_EQ(ans.size(), 4);
+  EXPECT_EQ(ans, expected);
+}

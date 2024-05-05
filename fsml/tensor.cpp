@@ -154,3 +154,29 @@ std::string tensor::repr() {
   return s;
 }
 
+
+std::vector<std::vector<int>> pad_left(std::vector<std::vector<int>> shapes) {
+  int max = 0;
+  for (std::vector<int> s: shapes) {
+    max = std::max(max, (int)s.size());
+  }
+
+  std::vector<std::vector<int>> ans;
+  for (std::vector<int> s: shapes) {
+    if (s.size() == max) {
+      ans.push_back(s);
+    } else {
+      std::vector<int> s_;
+      int numOnes = max - s.size();
+      for (int i = 0; i < numOnes; i++) {
+        s_.push_back(1);
+      }
+      for (int i = 0; i < s.size(); i++) {
+        s_.push_back(s[i]);
+      }
+      ans.push_back(s_);
+    }
+  }
+
+  return ans;
+}
