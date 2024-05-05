@@ -201,11 +201,11 @@ TEST(TensorTest, PadLeft3dMultiple) {
 
 TEST(TensorTest, BroadcastShapeGeneral) {
   std::vector<std::vector<int>> input = std::vector<std::vector<int>>{{
-    std::vector<int>{1, 1, 2},
-    std::vector<int>{3, 1, 2},
+    std::vector<int>{2},
+    std::vector<int>{1, 2},
     std::vector<int>{1, 2, 3},
   }};
-  std::vector<int> expected = std::vector<int>{3, 2, 3};
+  std::vector<int> expected = std::vector<int>{1, 2, 3};
 
   std::vector<int> ans = broadcast_shape(input);
 

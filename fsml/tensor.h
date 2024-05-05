@@ -18,7 +18,7 @@ std::vector<std::vector<int>> pad_left(std::vector<std::vector<int>> shapes);
 /**
  * returns the broadcast shape by finding max dimension for each dimension
  * 
- * @param shapes 2d vector of type `int`, all vectors in shape must be same size
+ * @param shapes 2d vector of type `int` 
  * @return vector of `int` represnting the broadcast shape to be done
 */
 std::vector<int> broadcast_shape(std::vector<std::vector<int>> shapes);
