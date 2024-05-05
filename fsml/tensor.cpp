@@ -180,3 +180,18 @@ std::vector<std::vector<int>> pad_left(std::vector<std::vector<int>> shapes) {
 
   return ans;
 }
+
+std::vector<int> broadcast_shape(std::vector<std::vector<int>> shapes) {
+  if (shapes.size() == 0) return std::vector<int>{};
+
+  int size = shapes[0].size();
+  std::vector<int> ans;
+  for (int i = 0; i < size; i++) {
+    int currDimMax = 0;
+    for (std::vector<int> s: shapes) {
+      currDimMax = std::max(currDimMax, s[i]);
+    }
+    ans.push_back(currDimMax);
+  }
+  return ans;
+}
