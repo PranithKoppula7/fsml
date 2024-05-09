@@ -59,6 +59,5 @@ private:
   float* data_;
   std::vector<int> shape_;
 
-  tensor& broadcast(tensor& other);
 };
 #endif

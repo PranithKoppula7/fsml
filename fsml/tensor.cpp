@@ -85,11 +85,10 @@ std::vector<int> tensor::shape() {
 }
 
 tensor tensor::operator+(tensor& other) {
-  tensor& other_bc = broadcast(other);
-  operation* Add = new add();
-  tensor t = Add->forward(*this, other_bc);
+  add* Add = new add();
+  tensor t = Add->forward(*this, other);
   t.parents_.push_back(this);
-  t.parents_.push_back(&other_bc);
+  t.parents_.push_back(&other);
   return t;
 }
 
@@ -107,39 +106,6 @@ void tensor::create_graph() {
   graph::run(*this);
 }
 
-tensor& tensor::broadcast(tensor& other) {
-  // shape matches exactly
-  if (shape_.size() == other.shape_.size() && shape_ == other.shape_) {
-    return other;
-  }
-
-  if (shape_.size() < other.shape_.size()) {
-    int j = other.shape_.size() - 1;
-    for (int i = shape_.size() - 1; i >= 0; i--) {
-      if (shape_[i] != other.shape_[j] &&
-          (shape_[i] != 1 || other.shape_[j] != 1)) {
-        throw std::runtime_error("shapes are not broadcastable");
-      }
-      j--;
-    }
-    
-  }
-
-  if (other.shape_.size() < shape_.size()) {
-    int j = shape_.size() - 1;
-    for (int i = other.shape_.size() - 1; i >= 0; i--) {
-      if (other.shape_[i] != shape_[j] && 
-          (other.shape_[i] != 1 || shape_[j] != 1)) {
-        throw std::runtime_error("shapes are not broadcastable");
-      }
-      j--;
-    }
-
-  }
-
-  return other;
-}
-
 std::string tensor::repr() {
   std::string s = "";
   s += "<Tensor size: " + std::to_string(size_);
@@ -154,6 +120,23 @@ std::string tensor::repr() {
   return s;
 }
 
+// std::pair<tensor, tensor> tensor::broadcast(tensor& other) {
+//   std::vector<int> out_shape = broadcast_shape(std::vector<std::vector<int>>{
+//     shape_,
+//     other.shape_
+//   });
+  
+//   if (shape_.size() > out_shape.size()) {
+//     throw std::runtime_error("Cannot broadcast tensor");
+//   }
+
+//   reshape* Reshape = new reshape();
+
+//   tensor x = Reshape->forward(*this, out_shape);
+//   tensor y = Reshape->forward(other, out_shape);
+
+//   return std::pair<tensor, tensor>{x, y};
+// }
 
 std::vector<std::vector<int>> pad_left(std::vector<std::vector<int>> shapes) {
   int max = 0;
