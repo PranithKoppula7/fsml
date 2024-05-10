@@ -1,5 +1,6 @@
 target_sources(
   fsml PUBLIC 
+  buffer.cpp
   tensor.cpp
   operation.cpp
   graph.cpp

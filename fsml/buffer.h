@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <cstddef>
 #include <cstdint>
@@ -7,13 +9,13 @@ template <typename T>
 class buffer {
 
 public:
-    buffer(std::vector<int>& shape);
+    buffer(std::vector<int> shape);
+
+    std::vector<int> getShape();
+    std::vector<std::size_t> getStrides();
 
 private:
     std::vector<int> shape;
     std::vector<std::size_t> strides;
-    std::size_t size;
     std::unique_ptr<T*> data;
-
-
 };
