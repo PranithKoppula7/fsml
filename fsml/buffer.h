@@ -9,13 +9,21 @@ template <typename T>
 class buffer {
 
 public:
-    buffer(std::vector<int> shape);
+    buffer(std::vector<int> shape, std::vector<T> data_);
 
     std::vector<int> getShape();
     std::vector<std::size_t> getStrides();
+    std::vector<T> getData();
+    
+
+    T& operator[](std::vector<int> index);
+
+    buffer<T> reshape(std::vector<int> newShape);
 
 private:
     std::vector<int> shape;
     std::vector<std::size_t> strides;
-    std::unique_ptr<T*> data;
+    std::vector<T> data;
+
+    int get1DIndex(std::vector<int> index);
 };
