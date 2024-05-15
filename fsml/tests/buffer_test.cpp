@@ -46,3 +46,13 @@ TEST(BufferTest, InitializeShapeContains0_Throws) {
         EXPECT_STREQ(e.what(), "Shape cannot contain 0");
     }
 }
+
+TEST(BufferTest, IndexingGeneral) {
+    std::vector<int> shape = {1, 2};
+    std::vector<float> a = {1.0, 2.0};
+
+    buffer<float> b(shape, a);
+    float i = b.get(std::vector<int>{0, 0});
+
+    EXPECT_EQ(i, 1.0);
+}

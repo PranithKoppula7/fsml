@@ -16,7 +16,7 @@ public:
     std::vector<T> getData();
     
 
-    T& operator[](std::vector<int> index);
+    T& get(std::vector<int> index);
 
     buffer<T> reshape(std::vector<int> newShape);
 

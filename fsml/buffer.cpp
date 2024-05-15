@@ -57,7 +57,7 @@ buffer<T> buffer<T>::reshape(std::vector<int> newShape) {
 }
 
 template<typename T>
-T& buffer<T>::operator[](std::vector<int> index) {
+T& buffer<T>::get(std::vector<int> index) {
     return data[get1DIndex(index)];
 }
 
