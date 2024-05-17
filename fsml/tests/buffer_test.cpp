@@ -63,3 +63,13 @@ TEST(BufferTest, IndexingGeneral) {
     EXPECT_EQ(i, 1.0);
     EXPECT_EQ(j, 2.0);
 }
+
+TEST(BufferTest, IndexingAndSetting) {
+    std::vector<int> shape = {2, 3, 5, 10};
+    std::vector<float> a(300, 1.0);
+
+    buffer<float> b(shape, a);
+    b.set(std::vector<int>{1, 2, 3, 4}, 2.0);
+
+    EXPECT_EQ(b.get(std::vector<int>{1, 2, 3, 4}), 2.0);
+}
