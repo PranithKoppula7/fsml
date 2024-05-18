@@ -65,20 +65,34 @@ buffer<T> buffer<T>::reshape(std::vector<int> newShape) {
 
 template<typename T>
 void buffer<T>::set(std::vector<int> index, T value) {
-    int index_ = get1DIndex(index);
-    std::cout << "index " << index_ << std::endl;
+    if (index.size() != shape_.size()) {
+        throw std::invalid_argument("index size must be same as shape size");
+    }
 
+    for (int i = 0; i < shape_.size(); i++) {
+        if (index[i] > shape_[i] || index[i] < 0) {
+            throw std::invalid_argument("index contains invalid dimension");
+        }
+    }
     char* offset = (char*)data_;
     for (int i = 0; i < strides_.size(); i++) {
         offset += index[i] * strides_[i];
     }
     T* ptr = (T*)offset;
     *ptr = value;
-    // data_[index_] = value;
 }
 
 template<typename T>
 T& buffer<T>::get(std::vector<int> index) {
+    if (index.size() != shape_.size()) {
+        throw std::invalid_argument("index size must be same as shape size");
+    }
+
+    for (int i = 0; i < shape_.size(); i++) {
+        if (index[i] > shape_[i] || index[i] < 0) {
+            throw std::invalid_argument("index contains invalid dimension");
+        }
+    }
     // stride
     // can do data_[get1DIndex(index)] but more time compelxity
     // cast to char because char* is smallest addressable unit
@@ -89,11 +103,7 @@ T& buffer<T>::get(std::vector<int> index) {
     for (int i = 0; i < strides_.size(); i++) {
         offset += index[i] * strides_[i];
     }
-
-    std::cout << (T*)offset << std::endl;
-    std::cout << &data_[get1DIndex(index)] << std::endl;
     return *((T*)offset);
-    // return data_[get1DIndex(index)];
 }
 
 template<typename T>

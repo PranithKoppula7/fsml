@@ -72,4 +72,5 @@ TEST(BufferTest, IndexingAndSetting) {
     b.set(std::vector<int>{1, 2, 3, 4}, 2.0);
 
     EXPECT_EQ(b.get(std::vector<int>{1, 2, 3, 4}), 2.0);
+    EXPECT_EQ(b.get(std::vector<int>{1, 2, 4, 9}), 1.0);
 }
