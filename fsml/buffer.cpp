@@ -46,6 +46,11 @@ std::vector<std::size_t> buffer<T>::strides() {
 }
 
 template<typename T>
+int buffer<T>::size() {
+    return size_;
+}
+
+template<typename T>
 T* buffer<T>::data() {
     return data_;
 }

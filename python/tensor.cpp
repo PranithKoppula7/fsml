@@ -5,6 +5,7 @@
 
 #include <variant>
 #include <iostream>
+#include <vector>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h>
@@ -60,11 +61,13 @@ void init_tensor(py::module_& m) {
 }
 
 tensor add_tensor(tensor& a, TensorAddTypes b) {
-  if (auto pv = std::get_if<py::int_>(&b); pv) {
-    return a + py::cast<float>(*pv);
-  } else if (auto pv = std::get_if<py::float_>(&b); pv) {
-    return a + *pv;
-  } else if (auto pv = std::get_if<py::object>(&b); pv) {
+  // TODO: add functionality for scalar adds
+  // if (auto pv = std::get_if<py::int_>(&b); pv) {
+  //   return a + py::cast<float>(*pv);
+  // } else if (auto pv = std::get_if<py::float_>(&b); pv) {
+  //   return a + *pv;
+  // } else 
+  if (auto pv = std::get_if<py::object>(&b); pv) {
     // TODO: @pranithkoppula - check for type, error handle
     return a + py::cast<tensor&>(*pv);
   }
@@ -74,25 +77,23 @@ tensor add_tensor(tensor& a, TensorAddTypes b) {
 
 tensor create_tensor(TensorInitTypes t) {
   if (auto pv = std::get_if<py::int_>(&t); pv) {
-    return tensor(1, py::cast<float>(*pv));
+    return tensor(std::vector<float>{py::cast<float>(*pv)}, std::vector<int>{1});
   } else if (auto pv = std::get_if<py::float_>(&t); pv) {
-    return tensor(1, py::cast<float>(*pv));
+    return tensor(std::vector<float>{py::cast<float>(*pv)}, std::vector<int>{1});
   } else if (auto pv = std::get_if<py::array_t<float>>(&t); pv) {
+    // TODO: @pranithkoppula fix this
     py::array_t<float> d = py::cast<py::array_t<float>>(*pv);
     py::buffer_info d_buffer = d.request();
     std::vector<py::ssize_t> shape = d_buffer.shape;
 
     std::vector<int> shape_vec;
-    int size = 1;
+    std::vector<float> data_vec;
 
     for (py::ssize_t s: shape) {
       shape_vec.push_back((int) s);
-      size *= (int)s;
     }
 
-    return tensor(size, 
-                  static_cast<float*>(d_buffer.ptr),
-                  shape_vec);
+    return tensor(data_vec, shape_vec);
   }
 
   throw std::invalid_argument("Got type that is not supported for initializing tensor");

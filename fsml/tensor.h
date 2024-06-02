@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 
+#include "buffer.h"
+#include "buffer.cpp"
+
 class operation;
 class tensor;
 
@@ -27,13 +30,7 @@ class tensor {
 
 public:
 
-  tensor(int size);
-
-  tensor(int size, float value);  
-
-  tensor(int size, float* data);
-
-  tensor(int size, float* data, std::vector<int> shape);
+  tensor(std::vector<float> data, std::vector<int> shape);
 
   float* data();
 
@@ -55,9 +52,7 @@ public:
   tensor* grad;
   std::vector<tensor*> parents_;
 private:
-  int size_;
-  float* data_;
-  std::vector<int> shape_;
+  buffer<float> data_;
 
 };
 #endif
