@@ -32,6 +32,8 @@ public:
 
   tensor(std::vector<float> data, std::vector<int> shape);
 
+  tensor(buffer<float> b): data_(b) {}
+
   float* data();
 
   int size();
@@ -48,11 +50,15 @@ public:
 
   std::string repr();
 
+
+  std::vector<std::pair<float, float>> tensor::broadcast(tensor& other);
+
   operation* ctx_;
   tensor* grad;
   std::vector<tensor*> parents_;
-private:
   buffer<float> data_;
+private:
+  tensor broadcast_to(tensor& x, std::vector<int> shape);
 
 };
 #endif

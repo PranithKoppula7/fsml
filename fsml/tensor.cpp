@@ -27,6 +27,16 @@ std::vector<int> tensor::shape() {
 
 tensor tensor::operator+(tensor& other) {
   add* Add = new add();
+
+  if (shape() == other.shape()) {
+    tensor t = Add->forward(*this, other);
+    t.parents_.push_back(this);
+    t.parents_.push_back(&other);
+    return t;
+  }
+
+
+
   tensor t = Add->forward(*this, other);
   t.parents_.push_back(this);
   t.parents_.push_back(&other);
@@ -63,23 +73,39 @@ std::string tensor::repr() {
   return s;
 }
 
-// std::pair<tensor, tensor> tensor::broadcast(tensor& other) {
-//   std::vector<int> out_shape = broadcast_shape(std::vector<std::vector<int>>{
-//     shape_,
-//     other.shape_
-//   });
-  
-//   if (shape_.size() > out_shape.size()) {
-//     throw std::runtime_error("Cannot broadcast tensor");
-//   }
+std::vector<std::pair<float, float>> tensor::broadcast(tensor& other) {
+  std::vector<int> out_shape = broadcast_shape(std::vector<std::vector<int>>{
+    shape(),
+    other.shape()
+  });
 
-//   reshape* Reshape = new reshape();
+  if (shape().size() > out_shape.size()) {
+    throw std::runtime_error("Cannot broadcast tensor");
+  }
 
-//   tensor x = Reshape->forward(*this, out_shape);
-//   tensor y = Reshape->forward(other, out_shape);
+  int size = 1;
+  for (int s: out_shape) {
+    size *= s;
+  }
 
-//   return std::pair<tensor, tensor>{x, y};
-// }
+  tensor a = broadcast_to(*this, out_shape);
+  tensor b = broadcast_to(other, out_shape);
+
+
+
+}
+
+tensor tensor::broadcast_to(tensor& x, std::vector<int> shape) {
+  if (x.shape() == shape) return x;
+
+  int diff = shape.size() - x.size();
+  std::vector<size_t> strides(shape.size(), 0);
+  for (int i = x.shape().size() - 1; i >= 0; i--) {
+    strides[i + diff] = x.shape()[i] == 1 ? 0 : x.data_.strides()[i];
+  }
+
+  return x;
+}
 
 std::vector<std::vector<int>> pad_left(std::vector<std::vector<int>> shapes) {
   int max = 0;
