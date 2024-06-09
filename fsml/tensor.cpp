@@ -4,6 +4,7 @@
 #include "graph.h"
 
 #include <cstddef>
+#include <stdlib.h>
 #include <iostream>
 
 tensor::tensor(std::vector<float> data, std::vector<int> shape) {
@@ -37,7 +38,17 @@ tensor tensor::operator+(tensor& other) {
 
 
 
-  tensor t = Add->forward(*this, other);
+  // tensor t = Add->forward(*this, other);
+  std::vector<int> out_shape = broadcast_shape(std::vector<std::vector<int>>{
+    shape(),
+    other.shape()
+  });
+  std::vector<std::pair<float, float>> b = broadcast(other);
+  std::vector<float> ans;
+  for (std::pair<float, float> a: b) {
+    ans.push_back(a.first + a.second);
+  }
+  tensor t = tensor(ans, out_shape);
   t.parents_.push_back(this);
   t.parents_.push_back(&other);
   return t;
@@ -88,15 +99,30 @@ std::vector<std::pair<float, float>> tensor::broadcast(tensor& other) {
     size *= s;
   }
 
-  tensor a = broadcast_to(*this, out_shape);
-  tensor b = broadcast_to(other, out_shape);
+  std::vector<size_t> a = broadcast_to(*this, out_shape);
+  std::vector<size_t> b = broadcast_to(other, out_shape);
 
-
-
+  std::vector<std::pair<float, float>> ans;
+  for (int i = 0; i < size; i++) {
+    int a_idx = elem_to_loc(i, shape(), a);
+    int b_idx = elem_to_loc(i, other.shape(), b);
+    ans.push_back(std::pair<float, float>(data()[a_idx], other.data()[b_idx]));
+  }
+  return ans;
 }
 
-tensor tensor::broadcast_to(tensor& x, std::vector<int> shape) {
-  if (x.shape() == shape) return x;
+size_t elem_to_loc(int elem, std::vector<int> shape, std::vector<size_t> strides) {
+   size_t loc = 0;
+    for (int i = shape.size() - 1; i >= 0; --i) {
+      auto q_and_r = ldiv(elem, shape[i]);
+      loc += q_and_r.rem * strides[i];
+      elem = q_and_r.quot;
+    }
+    return loc;
+}
+
+std::vector<size_t> tensor::broadcast_to(tensor& x, std::vector<int> shape) {
+  if (x.shape() == shape) return x.data_.strides();
 
   int diff = shape.size() - x.size();
   std::vector<size_t> strides(shape.size(), 0);
@@ -104,7 +130,7 @@ tensor tensor::broadcast_to(tensor& x, std::vector<int> shape) {
     strides[i + diff] = x.shape()[i] == 1 ? 0 : x.data_.strides()[i];
   }
 
-  return x;
+  return strides;
 }
 
 std::vector<std::vector<int>> pad_left(std::vector<std::vector<int>> shapes) {

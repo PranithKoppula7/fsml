@@ -85,12 +85,18 @@ tensor create_tensor(TensorInitTypes t) {
     py::array_t<float> d = py::cast<py::array_t<float>>(*pv);
     py::buffer_info d_buffer = d.request();
     std::vector<py::ssize_t> shape = d_buffer.shape;
-
     std::vector<int> shape_vec;
     std::vector<float> data_vec;
+    int size = 1;
+    float* p = static_cast<float*>(d_buffer.ptr);
 
     for (py::ssize_t s: shape) {
       shape_vec.push_back((int) s);
+      size *= s;
+    }
+
+    for (int i = 0; i < size; i++) {
+      data_vec.push_back(p[i]);
     }
 
     return tensor(data_vec, shape_vec);

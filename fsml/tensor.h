@@ -26,6 +26,9 @@ std::vector<std::vector<int>> pad_left(std::vector<std::vector<int>> shapes);
 */
 std::vector<int> broadcast_shape(std::vector<std::vector<int>> shapes);
 
+
+size_t elem_to_loc(int elem, std::vector<int> shape, std::vector<size_t> strides);
+
 class tensor {
 
 public:
@@ -51,14 +54,14 @@ public:
   std::string repr();
 
 
-  std::vector<std::pair<float, float>> tensor::broadcast(tensor& other);
+  std::vector<std::pair<float, float>> broadcast(tensor& other);
 
   operation* ctx_;
   tensor* grad;
   std::vector<tensor*> parents_;
   buffer<float> data_;
 private:
-  tensor broadcast_to(tensor& x, std::vector<int> shape);
+  std::vector<size_t> broadcast_to(tensor& x, std::vector<int> shape);
 
 };
 #endif
