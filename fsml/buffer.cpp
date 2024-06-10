@@ -35,6 +35,32 @@ buffer<T>::buffer(std::vector<int> shape,
     }
 }
 
+/** broadcastable constructor */
+template<typename T>
+buffer<T>::buffer(std::vector<int> shape,
+                  std::vector<T> data,
+                  std::vector<std::size_t> strides) {
+
+    int total_elems = 1;
+    for (int dim: shape) {
+        total_elems *= dim;
+    }
+
+    if (total_elems == 0) {
+        throw std::invalid_argument("Shape cannot contain 0");
+    }
+
+    size_ = total_elems;
+
+    size_t nBytes = size_ * sizeof(T);
+    data_ = (T*)malloc(nBytes);
+    for (int i = 0; i < size_; i++) {
+        data_[i] = data[i];
+    }
+
+    strides_ = strides;
+}
+
 template<typename T>
 std::vector<int> buffer<T>::shape() {
     return shape_;

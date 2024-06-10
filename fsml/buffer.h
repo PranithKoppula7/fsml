@@ -10,6 +10,7 @@ class buffer {
 
 public:
     buffer(std::vector<int> shape, std::vector<T> data);
+    buffer(std::vector<int> shape, std::vector<T> data, std::vector<std::size_t> strides);
 
     buffer() = default;
 

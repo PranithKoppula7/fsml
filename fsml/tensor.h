@@ -54,14 +54,15 @@ public:
   std::string repr();
 
 
-  std::vector<std::pair<float, float>> broadcast(tensor& other);
+  std::vector<std::pair<float, float>> broadcast(tensor& a, tensor& b);
 
   operation* ctx_;
   tensor* grad;
   std::vector<tensor*> parents_;
   buffer<float> data_;
 private:
-  std::vector<size_t> broadcast_to(tensor& x, std::vector<int> shape);
+  tensor broadcast_to(tensor& x, std::vector<int> shape);
+  std::vector<float> data_vec;
 
 };
 #endif

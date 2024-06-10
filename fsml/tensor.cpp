@@ -9,6 +9,7 @@
 
 tensor::tensor(std::vector<float> data, std::vector<int> shape) {
   data_ = buffer<float>(shape, data);
+  data_vec = data;
 }
 
 /*
@@ -29,26 +30,24 @@ std::vector<int> tensor::shape() {
 tensor tensor::operator+(tensor& other) {
   add* Add = new add();
 
-  if (shape() == other.shape()) {
-    tensor t = Add->forward(*this, other);
-    t.parents_.push_back(this);
-    t.parents_.push_back(&other);
-    return t;
-  }
-
-
-
-  // tensor t = Add->forward(*this, other);
   std::vector<int> out_shape = broadcast_shape(std::vector<std::vector<int>>{
     shape(),
     other.shape()
   });
-  std::vector<std::pair<float, float>> b = broadcast(other);
-  std::vector<float> ans;
-  for (std::pair<float, float> a: b) {
-    ans.push_back(a.first + a.second);
+
+  if (shape().size() > out_shape.size()) {
+    throw std::runtime_error("Cannot broadcast tensor");
   }
-  tensor t = tensor(ans, out_shape);
+
+  int size = 1;
+  for (int s: out_shape) {
+    size *= s;
+  }
+
+  tensor a = broadcast_to(*this, out_shape);
+  tensor b = broadcast_to(other, out_shape);
+  std::vector<std::pair<float, float>> pairs = broadcast(a, b);
+  tensor t = Add->forward(a, b);
   t.parents_.push_back(this);
   t.parents_.push_back(&other);
   return t;
@@ -84,28 +83,13 @@ std::string tensor::repr() {
   return s;
 }
 
-std::vector<std::pair<float, float>> tensor::broadcast(tensor& other) {
-  std::vector<int> out_shape = broadcast_shape(std::vector<std::vector<int>>{
-    shape(),
-    other.shape()
-  });
-
-  if (shape().size() > out_shape.size()) {
-    throw std::runtime_error("Cannot broadcast tensor");
-  }
-
-  int size = 1;
-  for (int s: out_shape) {
-    size *= s;
-  }
-
-  std::vector<size_t> a = broadcast_to(*this, out_shape);
-  std::vector<size_t> b = broadcast_to(other, out_shape);
-
+/** assumes a and b strides are adjusted before calling */
+std::vector<std::pair<float, float>> tensor::broadcast(tensor& a, tensor& other) {
   std::vector<std::pair<float, float>> ans;
+  int size = other.size();
   for (int i = 0; i < size; i++) {
-    int a_idx = elem_to_loc(i, shape(), a);
-    int b_idx = elem_to_loc(i, other.shape(), b);
+    int a_idx = elem_to_loc(i, shape(), a.data_.strides());
+    int b_idx = elem_to_loc(i, other.shape(), other.data_.strides());
     ans.push_back(std::pair<float, float>(data()[a_idx], other.data()[b_idx]));
   }
   return ans;
@@ -121,8 +105,8 @@ size_t elem_to_loc(int elem, std::vector<int> shape, std::vector<size_t> strides
     return loc;
 }
 
-std::vector<size_t> tensor::broadcast_to(tensor& x, std::vector<int> shape) {
-  if (x.shape() == shape) return x.data_.strides();
+tensor tensor::broadcast_to(tensor& x, std::vector<int> shape) {
+  if (x.shape() == shape) return x;
 
   int diff = shape.size() - x.size();
   std::vector<size_t> strides(shape.size(), 0);
@@ -130,7 +114,7 @@ std::vector<size_t> tensor::broadcast_to(tensor& x, std::vector<int> shape) {
     strides[i + diff] = x.shape()[i] == 1 ? 0 : x.data_.strides()[i];
   }
 
-  return strides;
+  return tensor(buffer<float>(shape, x.data_vec, strides));
 }
 
 std::vector<std::vector<int>> pad_left(std::vector<std::vector<int>> shapes) {
