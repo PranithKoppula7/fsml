@@ -54,7 +54,7 @@ public:
   std::string repr();
 
 
-  std::vector<std::pair<float, float>> broadcast(tensor& a, tensor& b);
+  std::pair<std::vector<float>, std::vector<float>> broadcast(tensor& a, tensor& b);
 
   operation* ctx_;
   tensor* grad;

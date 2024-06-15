@@ -74,3 +74,16 @@ TEST(BufferTest, IndexingAndSetting) {
     EXPECT_EQ(b.get(std::vector<int>{1, 2, 3, 4}), 2.0);
     EXPECT_EQ(b.get(std::vector<int>{1, 2, 4, 9}), 1.0);
 }
+
+TEST(BufferTest, GetByOffset) {
+    std::vector<int> shape = {1, 2};
+    std::vector<float> a = {1.0, 2.0};
+
+    buffer<float> b(shape, a);
+    float i = b.getFromOffset(0);
+    float j = b.getFromOffset(4);
+
+
+    EXPECT_EQ(i, 1.0);
+    EXPECT_EQ(j, 2.0);
+}

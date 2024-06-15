@@ -138,6 +138,12 @@ T& buffer<T>::get(std::vector<int> index) {
 }
 
 template<typename T>
+T& buffer<T>::getFromOffset(std::size_t offset) {
+    char* base_offset = (char*)data_;
+    return *((T*)(base_offset + offset));
+}
+
+template<typename T>
 int buffer<T>::get1DIndex(std::vector<int> index) {
     if (index.size() != shape_.size()) {
         throw std::invalid_argument("index size must be same as shape size");

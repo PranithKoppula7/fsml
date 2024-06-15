@@ -46,8 +46,10 @@ tensor tensor::operator+(tensor& other) {
 
   tensor a = broadcast_to(*this, out_shape);
   tensor b = broadcast_to(other, out_shape);
-  std::vector<std::pair<float, float>> pairs = broadcast(a, b);
-  tensor t = Add->forward(a, b);
+  std::pair<std::vector<float>, std::vector<float>> broadcasted = broadcast(a, b);
+  tensor a_broadcasted = tensor(broadcasted.first, out_shape);
+  tensor b_broadcasted = tensor(broadcasted.second, out_shape);
+  tensor t = Add->forward(a_broadcasted, b_broadcasted);
   t.parents_.push_back(this);
   t.parents_.push_back(&other);
   return t;
@@ -84,14 +86,19 @@ std::string tensor::repr() {
 }
 
 /** assumes a and b strides are adjusted before calling */
-std::vector<std::pair<float, float>> tensor::broadcast(tensor& a, tensor& other) {
-  std::vector<std::pair<float, float>> ans;
+std::pair<std::vector<float>, std::vector<float>> tensor::broadcast(tensor& a, tensor& other) {
+  std::pair<std::vector<float>, std::vector<float>> ans;
   int size = other.size();
+  std::vector<float> one;
+  std::vector<float> two;
   for (int i = 0; i < size; i++) {
     int a_idx = elem_to_loc(i, shape(), a.data_.strides());
-    int b_idx = elem_to_loc(i, other.shape(), other.data_.strides());
-    ans.push_back(std::pair<float, float>(data()[a_idx], other.data()[b_idx]));
+    int b_idx = elem_to_loc(i, other.data_.shape(), other.data_.strides());
+    one.push_back(a.data_.getFromOffset(a_idx));
+    two.push_back(other.data_.getFromOffset(b_idx));
   }
+  ans.first = one;
+  ans.second = two;
   return ans;
 }
 

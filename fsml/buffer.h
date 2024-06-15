@@ -22,6 +22,7 @@ public:
 
     T& get(std::vector<int> index);
     void set(std::vector<int> index, T value);
+    T& getFromOffset(std::size_t offset);
 
     buffer<T> reshape(std::vector<int> newShape);
 
