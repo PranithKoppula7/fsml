@@ -84,6 +84,10 @@ T* buffer<T>::data() {
 template<typename T>
 buffer<T> buffer<T>::reshape(std::vector<int> newShape) {
     // arg check
+
+    // algorithm to change shape / strides
+    // for i in newShape:
+    //   strides[i] *= strides[i+1] * strides[i+2] ... strides[i+n-1]
     for (int dim: shape_) {
         if (dim == 0) {
             throw std::invalid_argument("newShape cannot contain 0");
