@@ -55,6 +55,7 @@ public:
 
 
   std::pair<std::vector<float>, std::vector<float>> broadcast(tensor& a, tensor& b);
+  tensor broadcast(tensor& a, std::vector<int> shape);
 
   operation* ctx_;
   tensor* grad;

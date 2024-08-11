@@ -44,15 +44,25 @@ tensor tensor::operator+(tensor& other) {
     size *= s;
   }
 
-  tensor a = broadcast_to(*this, out_shape);
-  tensor b = broadcast_to(other, out_shape);
-  std::pair<std::vector<float>, std::vector<float>> broadcasted = broadcast(a, b);
-  tensor a_broadcasted = tensor(broadcasted.first, out_shape);
-  tensor b_broadcasted = tensor(broadcasted.second, out_shape);
-  tensor t = Add->forward(a_broadcasted, b_broadcasted);
-  t.parents_.push_back(this);
-  t.parents_.push_back(&other);
-  return t;
+  tensor a = broadcast(*this, out_shape);
+  tensor b = broadcast(other, out_shape);
+
+  tensor res = Add->forward(a, b);
+
+  res.parents_.push_back(this);
+  res.parents_.push_back(&other);
+
+  return res;
+
+  // tensor a = broadcast_to(*this, out_shape);
+  // tensor b = broadcast_to(other, out_shape);
+  // std::pair<std::vector<float>, std::vector<float>> broadcasted = broadcast(a, b);
+  // tensor a_broadcasted = tensor(broadcasted.first, out_shape);
+  // tensor b_broadcasted = tensor(broadcasted.second, out_shape);
+  // tensor t = Add->forward(a_broadcasted, b_broadcasted);
+  // t.parents_.push_back(this);
+  // t.parents_.push_back(&other);
+  // return t;
 }
 
 // tensor tensor::operator+(float other) {
@@ -85,8 +95,26 @@ std::string tensor::repr() {
   return s;
 }
 
+
+tensor tensor::broadcast(tensor& a, std::vector<int> shape) {
+  int size = 1;
+  for (int i = 0; i < shape.size(); i++) {
+    size *= shape[i];
+  }
+  std::vector<float> data;
+  float* a_data = a.data();
+  int boundary = a.size();
+  for (int i = 0; i < size; i++) {
+    data.push_back(a_data[i % boundary]);
+  }
+  return tensor(data, shape);
+}
+
 /** assumes a and b strides are adjusted before calling */
-std::pair<std::vector<float>, std::vector<float>> tensor::broadcast(tensor& a, tensor& other) {
+std::pair<std::vector<float>, std::vector<float>> tensor::broadcast(
+  tensor& a,
+  tensor& other) {
+
   std::pair<std::vector<float>, std::vector<float>> ans;
   int size = other.size();
   std::vector<float> one;
