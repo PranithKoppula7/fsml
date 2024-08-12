@@ -54,21 +54,7 @@ tensor tensor::operator+(tensor& other) {
 
   return res;
 
-  // tensor a = broadcast_to(*this, out_shape);
-  // tensor b = broadcast_to(other, out_shape);
-  // std::pair<std::vector<float>, std::vector<float>> broadcasted = broadcast(a, b);
-  // tensor a_broadcasted = tensor(broadcasted.first, out_shape);
-  // tensor b_broadcasted = tensor(broadcasted.second, out_shape);
-  // tensor t = Add->forward(a_broadcasted, b_broadcasted);
-  // t.parents_.push_back(this);
-  // t.parents_.push_back(&other);
-  // return t;
 }
-
-// tensor tensor::operator+(float other) {
-//   tensor* other_broadcast = new tensor(size_, other);
-//   return *this + *other_broadcast;
-// }
 
 void tensor::backward() {
   grad = new tensor(std::vector<float>(size(), 1.0), std::vector<int>{size()});
