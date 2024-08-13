@@ -30,28 +30,26 @@ std::vector<int> tensor::shape() {
 tensor tensor::operator+(tensor& other) {
   add* Add = new add();
 
-  std::vector<int> out_shape = broadcast_shape(std::vector<std::vector<int>>{
-    shape(),
-    other.shape()
-  });
+  // std::vector<int> out_shape = broadcast_shape(std::vector<std::vector<int>>{
+  //   shape(),
+  //   other.shape()
+  // });
 
-  if (shape().size() > out_shape.size()) {
-    throw std::runtime_error("Cannot broadcast tensor");
-  }
+  // if (shape().size() > out_shape.size()) {
+  //   throw std::runtime_error("Cannot broadcast tensor");
+  // }
 
-  int size = 1;
-  for (int s: out_shape) {
-    size *= s;
-  }
+  // int size = 1;
+  // for (int s: out_shape) {
+  //   size *= s;
+  // }
 
-  tensor a = broadcast(*this, out_shape);
-  tensor b = broadcast(other, out_shape);
+  // tensor a = broadcast(*this, out_shape);
+  // tensor b = broadcast(other, out_shape);
 
-  tensor res = Add->forward(a, b);
-
+  tensor res = Add->forward(*this, other);
   res.parents_.push_back(this);
   res.parents_.push_back(&other);
-
   return res;
 
 }

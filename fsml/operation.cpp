@@ -3,9 +3,17 @@
 #include "operation.h"
 #include "tensor.h"
 #include "buffer.h"
+#include "./transforms/broadcasting.h"
 
 tensor add::forward(tensor& x, tensor& y) {
-    float* c = Tensor::tensor_add(x.size(), x.data(), y.data());
+    broadcasting broadcaster = broadcasting(std::vector<tensor>{x, y});
+    std::vector<tensor> broadcasted = broadcaster.broadcast();
+
+    float* c = Tensor::tensor_add(
+        broadcaster.getSize(),
+        broadcasted.at(0).data(),
+        broadcasted.at(1).data());
+    
     std::vector<float> b;
     for (int i = 0; i < x.size(); i++) {
         b.push_back(c[i]);

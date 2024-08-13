@@ -61,9 +61,9 @@ public:
   tensor* grad;
   std::vector<tensor*> parents_;
   buffer<float> data_;
+  std::vector<float> data_vec;
 private:
   tensor broadcast_to(tensor& x, std::vector<int> shape);
-  std::vector<float> data_vec;
 
 };
 #endif
