@@ -30,9 +30,5 @@ private:
     std::vector<int> broadcast_shape(
         std::vector<std::vector<int>> shapes);
 
-    // tensor broadcast_to(
-    //     tensor& x,
-    //     std::vector<int> shape);
-
     tensor broadcast(tensor& a, std::vector<int> shape);
 };
