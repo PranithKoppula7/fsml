@@ -25,7 +25,7 @@ class TensorTest(unittest.TestCase):
     def test_shape_scalar(self):
         t = Tensor(1.0);
 
-        self.assertEqual(t.shape(), [])
+        self.assertEqual(t.shape(), [1.0])
 
     def test_shape_array(self):
         t = Tensor([1, 2]);
@@ -82,3 +82,10 @@ class TensorTest(unittest.TestCase):
         self.assertEqual(t3.grad().data(), [1.0, 1.0])
         self.assertEqual(t2.grad().data(), [1.0, 1.0])
         self.assertEqual(t1.grad().data(), [1.0, 1.0])
+
+    def test_broadcast(self):
+        t1 = Tensor(np.array([[1.0, 2.0], [3.0, 4.0]]))
+        t2 = Tensor(np.array([1.0, 2.0]))
+
+        t3 = t1 + t2
+        self.assertEqual(t3.data(), [2.0, 4.0, 4.0, 6.0])

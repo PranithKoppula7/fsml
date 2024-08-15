@@ -61,12 +61,11 @@ void init_tensor(py::module_& m) {
 }
 
 tensor add_tensor(tensor& a, TensorAddTypes b) {
-  // TODO: add functionality for scalar adds
-  // if (auto pv = std::get_if<py::int_>(&b); pv) {
-  //   return a + py::cast<float>(*pv);
-  // } else if (auto pv = std::get_if<py::float_>(&b); pv) {
-  //   return a + *pv;
-  // } else 
+  if (auto pv = std::get_if<py::int_>(&b); pv) {
+    return a + py::cast<float>(*pv);
+  } else if (auto pv = std::get_if<py::float_>(&b); pv) {
+    return a + *pv;
+  } else 
   if (auto pv = std::get_if<py::object>(&b); pv) {
     // TODO: @pranithkoppula - check for type, error handle
     return a + py::cast<tensor&>(*pv);
