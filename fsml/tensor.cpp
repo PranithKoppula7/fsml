@@ -36,14 +36,14 @@ tensor tensor::operator+(tensor& other) {
 
 }
 
-  tensor tensor::operator+(float other) {
-    add* Add = new add();
-    tensor other_ = tensor(std::vector<float>{other}, std::vector<int>{1});
-    tensor res = Add->forward(*this, other_);
-    res.parents_.push_back(this);
-    res.parents_.push_back(&other_);
-    return res;
-  }
+tensor tensor::operator+(float other) {
+  add* Add = new add();
+  tensor other_ = tensor(std::vector<float>{other}, std::vector<int>{1});
+  tensor res = Add->forward(*this, other_);
+  res.parents_.push_back(this);
+  res.parents_.push_back(&other_);
+  return res;
+}
 
 void tensor::backward() {
   grad = new tensor(std::vector<float>(size(), 1.0), std::vector<int>{size()});

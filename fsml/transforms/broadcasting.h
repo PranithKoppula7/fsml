@@ -24,9 +24,21 @@ private:
     std::vector<tensor> tensors;
 
 
+    /** 
+     * pads dimensions with 1 from left to right
+     * 
+     * @param shapes 2d vector of type `int` (shapes of tensors to pad)
+     * @return 2d vector of `int`, shapes padded with 1
+    */
     std::vector<std::vector<int>> pad_left(
         std::vector<std::vector<int>> shapes);
     
+    /**
+     * returns the broadcast shape by finding max dimension for each dimension
+     * 
+     * @param shapes 2d vector of type `int` 
+     * @return vector of `int` represnting the broadcast shape to be done
+    */
     std::vector<int> broadcast_shape(
         std::vector<std::vector<int>> shapes);
 
