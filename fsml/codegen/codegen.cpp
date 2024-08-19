@@ -16,9 +16,9 @@ namespace codegen {
         std::string op = root.ctx_->op_;
         if (op == "+") {
             llvm::FunctionType *sumFuncType = llvm::FunctionType::get(
-                llvm::Type::getInt32Ty(*context_),
-                {llvm::Type::getInt32Ty(*context_),
-                llvm::Type::getInt32Ty(*context_)},
+                llvm::Type::getFloatTy(*context_),
+                {llvm::Type::getFloatTy(*context_),
+                llvm::Type::getFloatTy(*context_)},
                 false
             );
 
@@ -48,17 +48,24 @@ namespace codegen {
             // return statement
             llvm::ReturnInst::Create(*context_, tmp, bb);
             owner_->print(llvm::errs(), nullptr);
+
+            // execution
             llvm::ExecutionEngine *ee = 
                 llvm::EngineBuilder(std::unique_ptr<llvm::Module>(owner_)).create();
             ee->finalizeObject();
-            int (*add_)(int, int) = (int (*)(int, int))ee->getFunctionAddress("custom_sum");
-            int res = add_(
-                // (int)root.parents_.at(0)->data_vec.at(0), 
-                // (int)root.parents_.at(1)->data_vec.at(0)
-                10,
-                10
-            );
-            printf("Result: %d\n", res);
+
+            // function call and answer
+            float (*add_)(float, float) = (float (*)(float, float))ee->getFunctionAddress("custom_sum");
+            std::vector<float> ans;
+            for (int i = 0; i < root.size(); i++) {
+                float a = root.parents_.at(0)->data_vec.at(i);
+                float b = root.parents_.at(1)->data_vec.at(i);
+                float res = add_(a, b);
+                ans.push_back(res);
+                // just first iteration
+                break;
+            }
+            printf("Result: %f\n", ans.at(0));
         }
         return tensor(std::vector<float>{2.0}, std::vector<int>{1});
     }

@@ -7,7 +7,7 @@
 #include "./codegen/codegen.h"
 
 tensor add::forward(tensor& x, tensor& y) {
-    bool gpu = false;
+    bool gpu = true;
 
     broadcasting broadcaster = broadcasting(std::vector<tensor>{x, y});
     std::vector<tensor> broadcasted = broadcaster.broadcast();
