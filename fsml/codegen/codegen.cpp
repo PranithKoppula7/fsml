@@ -30,7 +30,6 @@ namespace codegen {
             );
 
             // basic block for function
-            llvm::BasicBlock *bb = llvm::BasicBlock::Create(*context_, "entry", sumFunc);
 
             // args
             llvm::Function::arg_iterator args = sumFunc->arg_begin();
@@ -41,12 +40,11 @@ namespace codegen {
             llvm::Value *tmp = llvm::BinaryOperator::CreateAdd(
                 arg1,
                 arg2,
-                "tmp",
-                bb
+                "tmp"
             );
 
             // return statement
-            llvm::ReturnInst::Create(*context_, tmp, bb);
+            llvm::ReturnInst::Create(*context_, tmp);
             owner_->print(llvm::errs(), nullptr);
 
             // execution
@@ -56,16 +54,21 @@ namespace codegen {
 
             // function call and answer
             float (*add_)(float, float) = (float (*)(float, float))ee->getFunctionAddress("custom_sum");
-            std::vector<float> ans;
-            for (int i = 0; i < root.size(); i++) {
-                float a = root.parents_.at(0)->data_vec.at(i);
-                float b = root.parents_.at(1)->data_vec.at(i);
-                float res = add_(a, b);
-                ans.push_back(res);
-                // just first iteration
-                break;
-            }
-            printf("Result: %f\n", ans.at(0));
+            // std::vector<float> ans;
+            // for (int i = 0; i < root.size(); i++) {
+            //     float a = root.parents_.at(0)->data_vec.at(i);
+            //     float b = root.parents_.at(1)->data_vec.at(i);
+            //     float res = add_(a, b);
+            //     ans.push_back(res);
+            //     // just first iteration
+            //     break;
+            // }
+            // float add
+            float res = add_(
+                root.parents_.at(0)->data_vec.at(0),
+                root.parents_.at(1)->data_vec.at(0)
+            );
+            printf("Result: %f\n", res);
         }
         return tensor(std::vector<float>{2.0}, std::vector<int>{1});
     }

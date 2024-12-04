@@ -4,27 +4,27 @@
 #include "tensor.h"
 #include "buffer.h"
 #include "./transforms/broadcasting.h"
-#include "./codegen/codegen.h"
+// #include "./codegen/codegen.h"
 
 tensor add::forward(tensor& x, tensor& y) {
-    bool gpu = true;
+    bool gpu = false;
 
     broadcasting broadcaster = broadcasting(std::vector<tensor>{x, y});
     std::vector<tensor> broadcasted = broadcaster.broadcast();
 
-    if (!gpu) {
-        tensor placeholder = tensor(
-            std::vector<float>(broadcaster.getSize(), 1),
-            broadcaster.getShape()
-        );
+    // if (!gpu) {
+    //     tensor placeholder = tensor(
+    //         std::vector<float>(broadcaster.getSize(), 1),
+    //         broadcaster.getShape()
+    //     );
 
-        placeholder.ctx_ = this;
-        placeholder.parents_.push_back(&x);
-        placeholder.parents_.push_back(&y);
-        codegen::executor e = codegen::executor();
-        tensor t = e.execute(placeholder);
-        return t;
-    }
+    //     placeholder.ctx_ = this;
+    //     placeholder.parents_.push_back(&x);
+    //     placeholder.parents_.push_back(&y);
+    //     codegen::executor e = codegen::executor();
+    //     tensor t = e.execute(placeholder);
+    //     return t;
+    // }
 
     float* c = Tensor::tensor_add(
         broadcaster.getSize(),
